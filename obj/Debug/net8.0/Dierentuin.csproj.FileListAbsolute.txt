@@ -275,3 +275,4 @@ C:\Users\Pasca\Code\Dierentuin\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.S
 C:\Users\Pasca\Code\Dierentuin\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Windows.Extensions.dll
 C:\Users\Pasca\Code\Dierentuin\obj\Debug\net8.0\Dierentuin.csproj.AssemblyReference.cache
 C:\Users\Pasca\Code\Dierentuin\obj\Debug\net8.0\Dierentuin.csproj.Up2Date
+C:\Users\Pasca\Code\Dierentuin\obj\Debug\net8.0\Dierentuin.sourcelink.json

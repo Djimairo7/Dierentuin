@@ -50,6 +50,22 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Pasca/Code/Dierentuin/Views/Enclosure/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5jbG9zdXJlXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Pasca/Code/Dierentuin/Views/Enclosure/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5jbG9zdXJlXERlbGV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Pasca/Code/Dierentuin/Views/Enclosure/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5jbG9zdXJlXERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Pasca/Code/Dierentuin/Views/Enclosure/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5jbG9zdXJlXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Pasca/Code/Dierentuin/Views/Enclosure/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5jbG9zdXJlXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 

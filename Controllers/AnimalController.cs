@@ -12,9 +12,9 @@ namespace Dierentuin.Controllers
 {
     public class AnimalController : Controller
     {
-        private readonly AnimalContext _context;
+        private readonly DierentuinContext _context;
 
-        public AnimalController(AnimalContext context)
+        public AnimalController(DierentuinContext context)
         {
             _context = context;
         }
@@ -22,7 +22,7 @@ namespace Dierentuin.Controllers
         // GET: Animal
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Animal.ToListAsync());
+            return View(await _context.Animals.ToListAsync());
         }
 
         // GET: Animal/Details/5
@@ -33,7 +33,7 @@ namespace Dierentuin.Controllers
                 return NotFound();
             }
 
-            var animal = await _context.Animal
+            var animal = await _context.Animals
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (animal == null)
             {
@@ -73,7 +73,7 @@ namespace Dierentuin.Controllers
                 return NotFound();
             }
 
-            var animal = await _context.Animal.FindAsync(id);
+            var animal = await _context.Animals.FindAsync(id);
             if (animal == null)
             {
                 return NotFound();
@@ -124,7 +124,7 @@ namespace Dierentuin.Controllers
                 return NotFound();
             }
 
-            var animal = await _context.Animal
+            var animal = await _context.Animals
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (animal == null)
             {
@@ -139,10 +139,10 @@ namespace Dierentuin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var animal = await _context.Animal.FindAsync(id);
+            var animal = await _context.Animals.FindAsync(id);
             if (animal != null)
             {
-                _context.Animal.Remove(animal);
+                _context.Animals.Remove(animal);
             }
 
             await _context.SaveChangesAsync();
@@ -151,7 +151,7 @@ namespace Dierentuin.Controllers
 
         private bool AnimalExists(int id)
         {
-            return _context.Animal.Any(e => e.Id == id);
+            return _context.Animals.Any(e => e.Id == id);
         }
     }
 }
