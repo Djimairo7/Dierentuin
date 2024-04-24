@@ -1,15 +1,22 @@
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
+# Build environment
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /App
 
-# Copy everything
-COPY . ./
-# Restore as distinct layers
+# Copy csproj and restore as distinct layers
+COPY *.csproj ./
 RUN dotnet restore
-# Build and publish a release
+
+# Copy everything else and build
+COPY . ./
 RUN dotnet publish -c Release -o out
 
-# Build runtime image
+# Runtime environment
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /App
-COPY --from=build-env /App/out .
-ENTRYPOINT ["dotnet", "DotNet.Docker.dll"]
+COPY --from=build /App/out .
+EXPOSE 5000
+
+# Set environment variables
+ENV ASPNETCORE_URLS="http://+:5000"
+
+ENTRYPOINT ["dotnet", "Dierentuin.dll"]
