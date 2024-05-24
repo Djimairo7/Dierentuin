@@ -1,22 +1,25 @@
-# Build environment
+#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+USER app
+WORKDIR /app
+EXPOSE 8080
+EXPOSE 8081
+
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /App
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src
+COPY ["Dierentuin/Dierentuin.csproj", "Dierentuin/"]
+RUN dotnet restore "./Dierentuin/Dierentuin.csproj"
+COPY . .
+WORKDIR "/src/Dierentuin"
+RUN dotnet build "./Dierentuin.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-# Copy csproj and restore as distinct layers
-COPY *.csproj ./
-RUN dotnet restore
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./Dierentuin.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-# Copy everything else and build
-COPY . ./
-RUN dotnet publish -c Release -o out
-
-# Runtime environment
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
-WORKDIR /App
-COPY --from=build /App/out .
-EXPOSE 5000
-
-# Set environment variables
-ENV ASPNETCORE_URLS="http://+:5000"
-
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Dierentuin.dll"]
