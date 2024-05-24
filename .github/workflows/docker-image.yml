@@ -15,4 +15,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build  -t Dierentuin:${{ env.BRANCH_NAME }} -f Dierentuin/Dockerfile
+      run: docker build -t Dierentuin:${{ env.BRANCH_NAME }} -f Dierentuin/Dockerfile .
