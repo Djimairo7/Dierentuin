@@ -19,9 +19,10 @@ RUN dotnet build "./Dierentuin.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # Stage for running tests
 FROM build AS testrunner
-WORKDIR /src/TestProject1
+WORKDIR /src
 COPY . .
-RUN dotnet test --logger:trx
+WORKDIR /src/TestProject1
+RUN dotnet test "./TestProject1.csproj" --logger:trx
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
