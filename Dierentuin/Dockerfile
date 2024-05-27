@@ -29,4 +29,4 @@ RUN dotnet publish "./Dierentuin.csproj" -c $BUILD_CONFIGURATION -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "./Dierentuin/Dierentuin.dll"]
+ENTRYPOINT ["dotnet", "Dierentuin.dll"]
