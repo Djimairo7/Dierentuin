@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: group01
+  namespace: group01
+  labels:
+    app: group01
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: group01
+  template:
+    metadata:
+      labels:
+        app: group01
+    spec:
+      containers:
+      - name: group01
+        image: niloyan/dierentuin:latest
+        ports:
+        - name: web
+          containerPort: 8080
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+      imagePullSecrets:
+      - name: registry-credentials
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: group01
+  namespace: group01
+spec:
+  ports:
+  - name: web
+    port: 8080
+    targetPort: web
+  selector:
+    app: group01
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: group01route
+  namespace: group01
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`group01.web.dops.tech`) && PathPrefix(`/`)
+    kind: Rule
+    services:
+    - name: group01
+      port: 8080
+  tls:
+    certResolver: myresolver

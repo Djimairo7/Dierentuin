@@ -10,7 +10,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Dierentuin/Dierentuin.csproj", "Dierentuin/"]
-COPY ["TestProject1/TestProject1.csproj", "TestProject1/"]
+COPY ["./TestProject1/TestProject1.csproj", "./TestProject1/"]
 RUN dotnet restore "./Dierentuin/Dierentuin.csproj"
 RUN dotnet restore "./TestProject1/TestProject1.csproj"
 COPY . .
@@ -19,10 +19,8 @@ RUN dotnet build "./Dierentuin.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # Stage for running tests
 FROM build AS testrunner
-WORKDIR /src
-COPY . .
 WORKDIR /src/TestProject1
-RUN dotnet test "./TestProject1.csproj" --logger:trx
+RUN dotnet test --logger:trx
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
@@ -31,4 +29,4 @@ RUN dotnet publish "./Dierentuin.csproj" -c $BUILD_CONFIGURATION -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Dierentuin.dll"]
+ENTRYPOINT ["dotnet", "./Dierentuin/Dierentuin.dll"]
