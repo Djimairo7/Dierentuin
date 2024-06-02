@@ -27,3 +27,33 @@ jobs:
 
     - name: Push Docker image
       run: docker push niloyan/dierentuin:latest
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Run tests in Docker container
+      run: docker run niloyan/dierentuin:latest pytest  # Replace 'pytest' with your actual test command
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up kubectl
+      uses: actions/setup-kubectl@v1
+      with:
+        version: 'latest'
+
+    - name: Set up kubeconfig
+      run: echo "${{ secrets.KUBECONFIG_CONTENT }}" | base64 -d > ~/.kube/config
+
+    - name: Deploy to Kubernetes
+      run: kubectl apply -f Dierentuin/deploy.yml
