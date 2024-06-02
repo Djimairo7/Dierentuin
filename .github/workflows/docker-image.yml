@@ -37,7 +37,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Run tests in Docker container
-      run: docker run niloyan/dierentuin:latest pytest  # Replace 'pytest' with your actual test command
+      run: docker run niloyan/dierentuin:latest
 
   deploy:
     needs: test
