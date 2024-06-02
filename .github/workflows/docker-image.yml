@@ -36,8 +36,25 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Run tests in Docker container
-      run: docker run niloyan/dierentuin:latest
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '6.0.x' # Zet hier je gewenste .NET versie
+
+    - name: Restore dependencies
+      run: dotnet restore Dierentuin.sln
+
+    - name: Build solution
+      run: dotnet build Dierentuin.sln --no-restore
+
+    - name: Run tests
+      run: dotnet test Dierentuin.sln --no-build --logger trx
+
+    - name: Publish test results
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-results
+        path: '**/*.trx'
 
   deploy:
     needs: test
