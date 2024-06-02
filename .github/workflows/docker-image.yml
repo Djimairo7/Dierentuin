@@ -37,9 +37,9 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Set up .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '6.0.x' # Zet hier je gewenste .NET versie
+        dotnet-version: '8.0.x' # Update naar de vereiste .NET versie
 
     - name: Restore dependencies
       run: dotnet restore Dierentuin.sln
