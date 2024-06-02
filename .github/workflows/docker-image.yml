@@ -28,8 +28,19 @@ jobs:
     - name: Push Docker image
       run: docker push niloyan/dierentuin:latest
 
-  deploy:
+  test:
     needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Run tests in Docker container
+      run: docker run niloyan/dierentuin:latest pytest  # Replace 'pytest' with your actual test command
+
+  deploy:
+    needs: test
     runs-on: ubuntu-latest
 
     steps:
