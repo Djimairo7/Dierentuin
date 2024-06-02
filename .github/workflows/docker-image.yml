@@ -69,6 +69,9 @@ jobs:
       with:
         version: 'latest'
 
+    - name: Create .kube directory
+      run: mkdir -p ~/.kube
+
     - name: Set up kubeconfig
       run: echo "${{ secrets.KUBECONFIG_CONTENT }}" | base64 -d > ~/.kube/config
 
