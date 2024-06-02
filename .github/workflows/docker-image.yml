@@ -69,11 +69,11 @@ jobs:
       with:
         version: 'latest'
 
-    - name: Create Kubernetes Config Directory
-      run: mkdir -p $HOME/.kube
-
     - name: Set up kubeconfig
-      run: echo "${{ secrets.KUBECONFIG_CONTENT }}" | base64 -d > $HOME/.kube/config
+      run: echo "${{ secrets.KUBECONFIG_CONTENT }}" | base64 -d > ~/.kube/config
+
+    - name: Create namespace
+      run: kubectl create namespace group01 || true
 
     - name: Deploy to Kubernetes
-      run: kubectl apply -f Dierentuin/deploy.yml
+      run: kubectl apply -f Dierentuin/deploy.yml --validate=false
