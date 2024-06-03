@@ -11,9 +11,11 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Dierentuin/Dierentuin.csproj", "Dierentuin/"]
 COPY ["TestProject1/TestProject1.csproj", "TestProject1/"]
-# Restore the project dependencies
-RUN dotnet restore "Dierentuin/Dierentuin.csproj"
-RUN dotnet restore "TestProject1/TestProject1.csproj"
+# Clear the NuGet cache
+RUN dotnet nuget locals all --clear
+# Restore the project dependencies with detailed logging
+RUN dotnet restore "Dierentuin/Dierentuin.csproj" --verbosity detailed
+RUN dotnet restore "TestProject1/TestProject1.csproj" --verbosity detailed
 COPY . .
 WORKDIR "/src/Dierentuin"
 RUN dotnet build "Dierentuin.csproj" -c $BUILD_CONFIGURATION -o /app/build
