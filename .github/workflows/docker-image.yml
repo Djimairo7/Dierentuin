@@ -29,7 +29,7 @@ jobs:
 
     - name: Build Docker image
       run: docker buildx build
-          --platform "linux/amd64,linux/arm64"  -t niloyan/dierentuin:latest -f Dierentuin/Dockerfile .
+          --platform "linux/amd64,linux/arm64"  -t niloyan/dierentuin:latest -f Dierentuin/Dockerfile --push .
 
     - name: Push Docker image
       run: docker push niloyan/dierentuin:latest
