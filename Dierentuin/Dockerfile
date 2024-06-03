@@ -27,7 +27,12 @@ RUN dotnet test --logger:trx
 
 # Publish the application
 FROM build AS publish
+WORKDIR /src/Dierentuin
 RUN dotnet publish "Dierentuin.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
+# Add debug information to check paths and contents
+RUN ls -la /app/publish
+RUN pwd
 
 # Final stage / runtime
 FROM base AS final
