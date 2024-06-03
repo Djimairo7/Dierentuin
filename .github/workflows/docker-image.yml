@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: CI
 
 on:
   push:
@@ -6,46 +6,55 @@ on:
       - main
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-        
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
       - name: Log in to Docker Hub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and Push Docker image
-        run: |
-          docker buildx build \
-            --platform "linux/arm64" \
-            -t niloyan/dierentuin:latest \
-            -f Dierentuin/Dockerfile \
-            --push .
+      - name: Build Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: Dierentuin/Dockerfile
+          tags: niloyan/dierentuin:latest
+          load: true  # Belangrijk voor testen, laadt image in Docker omgeving
+          platforms: linux/arm64
 
-  deploy:
-    needs: build-and-test
+  test:
     runs-on: ubuntu-latest
+    needs: build
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up kubectl
-        uses: azure/setup-kubectl@v1
+      - name: Set up Docker environment
+        run: docker pull niloyan/dierentuin:latest
+
+      - name: Run tests
+        run: docker run niloyan/dierentuin:latest dotnet test --logger:trx
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
         with:
-          version: 'latest'
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Create namespace
-        run: kubectl create namespace group01 || true
+      - name: Push Docker image to Docker Hub
+        run: docker push niloyan/dierentuin:latest
 
-      - name: Deploy to Kubernetes
-        run: kubectl apply -f Dierentuin/deploy.yml
+
