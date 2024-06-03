@@ -14,8 +14,8 @@ COPY ["TestProject1/TestProject1.csproj", "TestProject1/"]
 # Clear the NuGet cache
 RUN dotnet nuget locals all --clear
 # Restore the project dependencies with detailed logging
-RUN dotnet restore "Dierentuin/Dierentuin.csproj" --verbosity detailed
-RUN dotnet restore "TestProject1/TestProject1.csproj" --verbosity detailed
+RUN dotnet restore "Dierentuin/Dierentuin.csproj"
+RUN dotnet restore "TestProject1/TestProject1.csproj"
 COPY . .
 WORKDIR "/src/Dierentuin"
 RUN dotnet build "Dierentuin.csproj" -c $BUILD_CONFIGURATION -o /app/build
