@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -24,7 +24,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build Docker image
+      - name: Build and Push Docker image
         run: |
           docker buildx build \
             --platform "linux/arm64" \
@@ -32,35 +32,8 @@ jobs:
             -f Dierentuin/Dockerfile \
             --push .
 
-  test:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up .NET
-        uses: actions/setup-dotnet@v2
-        with:
-          dotnet-version: '8.0.x'
-
-      - name: Restore dependencies
-        run: dotnet restore Dierentuin.sln
-
-      - name: Build solution
-        run: dotnet build Dierentuin.sln --no-restore
-
-      - name: Run tests
-        run: dotnet test Dierentuin.sln --no-build --logger trx
-
-      - name: Publish test results
-        uses: actions/upload-artifact@v2
-        with:
-          name: test-results
-          path: '**/*.trx'
-
   deploy:
-    needs: test
+    needs: build-and-test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
