@@ -23,7 +23,8 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build Docker image
-      run: docker build -t niloyan/dierentuin:latest -f Dierentuin/Dockerfile .
+      run: docker buildx build \
+          --platform "linux/amd64,linux/arm64"  -t niloyan/dierentuin:latest -f Dierentuin/Dockerfile .
 
     - name: Push Docker image
       run: docker push niloyan/dierentuin:latest
