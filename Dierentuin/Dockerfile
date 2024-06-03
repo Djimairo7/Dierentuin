@@ -11,8 +11,6 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Dierentuin/Dierentuin.csproj", "Dierentuin/"]
 COPY ["TestProject1/TestProject1.csproj", "TestProject1/"]
-# Disable NuGet vulnerability checks
-ENV NUGET_CLI_DISABLE_VULNERABILITY_CHECKS=true
 RUN dotnet restore "Dierentuin/Dierentuin.csproj"
 RUN dotnet restore "TestProject1/TestProject1.csproj"
 COPY . .
