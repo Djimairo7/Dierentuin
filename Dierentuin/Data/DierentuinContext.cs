@@ -12,5 +12,15 @@ namespace Dierentuin.Data
         public DbSet<Animal> Animals { get; set; } = default!;
         public DbSet<Category> Categories { get; set; } = default!;
         public DbSet<Enclosure> Enclosures { get; set; } = default!;
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Animal>()
+                .HasOne(a => a.Enclosure)
+                .WithMany(e => e.Animals)
+                .HasForeignKey(a => a.EnclosureId);
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

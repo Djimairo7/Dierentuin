@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Dierentuin.Data;
 using System;
 using System.Linq;
+using Dierentuin.Data; // Add this directive
+using Dierentuin.Models;
 
 namespace Dierentuin.Models
 {
@@ -27,9 +28,36 @@ namespace Dierentuin.Models
                     context.SaveChanges();
                 }
 
+                if (!context.Enclosures.Any())
+                {
+                    context.Enclosures.AddRange(
+                        new Enclosure
+                        {
+                            Name = "Savannah Exhibit",
+                            Climate = Enclosure.ClimateType.Temperate,
+                            Habitat = Enclosure.HabitatTypes.Grassland,
+                            Security = Enclosure.SecurityLevel.Medium,
+                            Size = 200.0,
+                            Animals = new List<Animal>() // Initialize with an empty list
+                        },
+                        new Enclosure
+                        {
+                            Name = "Tropical Rainforest",
+                            Climate = Enclosure.ClimateType.Tropical,
+                            Habitat = Enclosure.HabitatTypes.Forest,
+                            Security = Enclosure.SecurityLevel.High,
+                            Size = 300.0,
+                            Animals = new List<Animal>() // Initialize with an empty list
+                        }
+                    );
+
+                    context.SaveChanges();
+                }
+
                 if (!context.Animals.Any())
                 {
                     var mammals = context.Categories.First(c => c.Name == "Mammals");
+                    var savannahExhibit = context.Enclosures.First(e => e.Name == "Savannah Exhibit");
 
                     context.Animals.AddRange(
                         new Animal
@@ -40,11 +68,14 @@ namespace Dierentuin.Models
                             Diet = Animal.DietaryClass.Carnivore,
                             Activity = Animal.ActivityPattern.Diurnal,
                             Prey = "None",
-                            Enclosure = "1",
+                            Enclosure = savannahExhibit, // Assign Enclosure
+                            EnclosureId = savannahExhibit.Id, // Assign EnclosureId
                             Space = 10,
-                            Security = Animal.SecurityLevel.Low
+                            Security = Animal.SecurityLevel.Low,
+                            Category = mammals
                         }
                     );
+
                     context.SaveChanges();
                 }
             }

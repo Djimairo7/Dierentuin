@@ -34,6 +34,7 @@ namespace Dierentuin.Controllers
             }
 
             var enclosure = await _context.Enclosures
+                .Include(e => e.Animals) // Include the list of animals
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (enclosure == null)
             {

@@ -4,7 +4,7 @@ public class Enclosure
 {
     public int Id { get; set; }
     public required string Name { get; set; }
-    public required List<Animal> Animals { get; set; }
+    public required List<Animal> Animals { get; set; } = new List<Animal>();
     public enum ClimateType
     {
         Tropical,
