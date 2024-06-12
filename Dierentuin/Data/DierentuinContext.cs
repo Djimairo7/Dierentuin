@@ -9,7 +9,8 @@ namespace Dierentuin.Data
 {
     public class DierentuinContext(DbContextOptions<DierentuinContext> options) : DbContext(options)
     {
-        public DbSet<Enclosure> Enclosures { get; set; } = default!;
         public DbSet<Animal> Animals { get; set; } = default!;
+        public DbSet<Category> Categories { get; set; } = default!;
+        public DbSet<Enclosure> Enclosures { get; set; } = default!;
     }
 }

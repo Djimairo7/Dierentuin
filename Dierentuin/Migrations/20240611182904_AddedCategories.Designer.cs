@@ -3,6 +3,7 @@ using System;
 using Dierentuin.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dierentuin.Migrations
 {
     [DbContext(typeof(DierentuinContext))]
-    partial class DierentuinContextModelSnapshot : ModelSnapshot
+    [Migration("20240611182904_AddedCategories")]
+    partial class AddedCategories
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.4");
@@ -26,7 +29,7 @@ namespace Dierentuin.Migrations
                     b.Property<int>("Activity")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("CategoryId")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Diet")
@@ -114,14 +117,21 @@ namespace Dierentuin.Migrations
             modelBuilder.Entity("Dierentuin.Models.Animal", b =>
                 {
                     b.HasOne("Dierentuin.Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId");
+                        .WithMany("Animals")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Dierentuin.Models.Enclosure", null)
                         .WithMany("Animals")
                         .HasForeignKey("EnclosureId");
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Dierentuin.Models.Category", b =>
+                {
+                    b.Navigation("Animals");
                 });
 
             modelBuilder.Entity("Dierentuin.Models.Enclosure", b =>

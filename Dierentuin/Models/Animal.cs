@@ -5,7 +5,8 @@ public class Animal
     public int Id { get; set; }
     public required string Name { get; set; }
     public required string Species { get; set; }
-    public required string Category { get; set; }
+    public int? CategoryId { get; set; } = null;
+    public Category? Category { get; set; }
     public enum AnimalSize
     {
         Microscopic,
