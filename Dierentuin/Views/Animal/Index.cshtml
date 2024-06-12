@@ -78,7 +78,14 @@
                     @Html.DisplayFor(modelItem => item.Prey)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Enclosure)
+                    @if (item.Enclosure != null)
+                    {
+                        @Html.DisplayFor(modelItem => item.Enclosure.Name)
+                    }
+                    else
+                    {
+                        <text>None</text>
+                    }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Space)

@@ -38,7 +38,6 @@ namespace Dierentuin.Models
                             Habitat = Enclosure.HabitatTypes.Grassland,
                             Security = Enclosure.SecurityLevel.Medium,
                             Size = 200.0,
-                            Animals = new List<Animal>() // Initialize with an empty list
                         },
                         new Enclosure
                         {
@@ -47,7 +46,6 @@ namespace Dierentuin.Models
                             Habitat = Enclosure.HabitatTypes.Forest,
                             Security = Enclosure.SecurityLevel.High,
                             Size = 300.0,
-                            Animals = new List<Animal>() // Initialize with an empty list
                         }
                     );
 

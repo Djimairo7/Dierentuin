@@ -47,7 +47,10 @@
             <ul>
                 @foreach (var animal in Model.Animals)
                 {
-                    <li>@animal.Name (@animal.Species)</li>
+                    <li>
+                        <a asp-controller="Animal" asp-action="Details" asp-route-id="@animal.Id">@animal.Name
+                            (@animal.Species)</a>
+                    </li>
                 }
             </ul>
         </dd>

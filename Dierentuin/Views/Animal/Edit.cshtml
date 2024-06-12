@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Edit";
     var categories = ViewData["Categories"] as SelectList;
+    var enclosures = ViewData["Enclosures"] as SelectList;
 }
 
 <h1>Edit</h1>
@@ -67,9 +68,11 @@
                 <span asp-validation-for="Prey" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Enclosure" class="control-label"></label>
-                <input asp-for="Enclosure" class="form-control" />
-                <span asp-validation-for="Enclosure" class="text-danger"></span>
+                <label asp-for="EnclosureId" class="control-label"></label>
+                <select asp-for="EnclosureId" class="form-control" asp-items="@(enclosures)">
+                    <option value="">None</option>
+                </select>
+                <span asp-validation-for="EnclosureId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Space" class="control-label"></label>

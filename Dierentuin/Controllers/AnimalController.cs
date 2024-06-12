@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +20,10 @@ namespace Dierentuin.Controllers
         // GET: Animal
         public async Task<IActionResult> Index()
         {
-            var animals = await _context.Animals.Include(a => a.Category).ToListAsync();
+            var animals = await _context.Animals
+                .Include(a => a.Category)
+                .Include(a => a.Enclosure)
+                .ToListAsync();
             return View(animals);
         }
 
@@ -36,6 +37,7 @@ namespace Dierentuin.Controllers
             var animals = await _context.Animals
                 .Where(a => a.CategoryId == id)
                 .Include(a => a.Category)
+                .Include(a => a.Enclosure)
                 .ToListAsync();
 
             if (animals == null || animals.Count == 0)
@@ -56,6 +58,7 @@ namespace Dierentuin.Controllers
 
             var animal = await _context.Animals
                 .Include(a => a.Category)
+                .Include(a => a.Enclosure)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (animal == null)
             {
@@ -68,12 +71,13 @@ namespace Dierentuin.Controllers
         public IActionResult Create()
         {
             ViewData["Categories"] = new SelectList(_context.Categories, "Id", "Name");
+            ViewData["Enclosures"] = new SelectList(_context.Enclosures, "Id", "Name");
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Species,CategoryId,Size,Diet,Activity,Prey,Enclosure,Space,Security")] Animal animal)
+        public async Task<IActionResult> Create([Bind("Id,Name,Species,CategoryId,EnclosureId,Size,Diet,Activity,Prey,Space,Security")] Animal animal)
         {
             if (ModelState.IsValid)
             {
@@ -82,9 +86,9 @@ namespace Dierentuin.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["Categories"] = new SelectList(_context.Categories, "Id", "Name", animal.CategoryId);
+            ViewData["Enclosures"] = new SelectList(_context.Enclosures, "Id", "Name", animal.EnclosureId);
             return View(animal);
         }
-
 
         // GET: Animal/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -99,16 +103,15 @@ namespace Dierentuin.Controllers
             {
                 return NotFound();
             }
-            ViewData["Categories"] = new SelectList(_context.Categories, "Id", "Name");
+            ViewData["Categories"] = new SelectList(_context.Categories, "Id", "Name", animal.CategoryId);
+            ViewData["Enclosures"] = new SelectList(_context.Enclosures, "Id", "Name", animal.EnclosureId);
             return View(animal);
         }
 
         // POST: Animal/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Species,CategoryId,Size,Diet,Activity,Prey,Enclosure,Space,Security")] Animal animal)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Species,CategoryId,EnclosureId,Size,Diet,Activity,Prey,Space,Security")] Animal animal)
         {
             if (id != animal.Id)
             {
@@ -135,12 +138,10 @@ namespace Dierentuin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-
-            // If ModelState is invalid, re-populate the categories
             ViewData["Categories"] = new SelectList(_context.Categories, "Id", "Name", animal.CategoryId);
+            ViewData["Enclosures"] = new SelectList(_context.Enclosures, "Id", "Name", animal.EnclosureId);
             return View(animal);
         }
-
 
         // GET: Animal/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -151,6 +152,8 @@ namespace Dierentuin.Controllers
             }
 
             var animal = await _context.Animals
+                .Include(a => a.Category)
+                .Include(a => a.Enclosure)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (animal == null)
             {
