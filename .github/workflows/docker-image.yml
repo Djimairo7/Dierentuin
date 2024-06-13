@@ -39,8 +39,7 @@ jobs:
             -t Paskie0/dierentuin:${{ github.ref_name }} \
             --target final --build-arg "INCLUDE_UNITTESTING=true" \
             -f ./Dierentuin/Dockerfile .
-
-
+            
   push-docker-hub:
     runs-on: [self-hosted, Linux, ARM64]
     if: github.ref_name == 'master' || github.ref_name == 'production'
