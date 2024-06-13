@@ -18,7 +18,7 @@ jobs:
         docker build --no-cache \
           -t Paskie0/dierentuin:${{ github.ref_name }} \
           --target build --build-arg "INCLUDE_UNITTESTING=true" \
-          -f ./DierenTuin/Dockerfile .
+          -f ./Dierentuin/DierenTuin/Dockerfile .
 
   unittesting:
     runs-on: [self-hosted, Linux, ARM64]
