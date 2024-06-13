@@ -16,7 +16,7 @@ jobs:
     - name: Build and cache Docker image
       run: |
         docker build --no-cache \
-          -t Paskie0/Dierentuin:${{ github.ref_name }} \
+          -t Paskie0/dierentuin:${{ github.ref_name }} \
           --target build --build-arg "INCLUDE_UNITTESTING=true" \
           -f ./DierenTuin/Dockerfile .
 
