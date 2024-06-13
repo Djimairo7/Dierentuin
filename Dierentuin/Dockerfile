@@ -18,7 +18,7 @@ RUN dotnet restore "Dierentuin/Dierentuin.csproj"
 RUN dotnet restore "TestProject1/TestProject1.csproj"
 COPY . .
 WORKDIR "/src/Dierentuin"
-RUN dotnet build "Dierentuin.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "Dierentuin.csproj" -c $BUILD_CONFIGURATION -o /app/build --no-restore
 
 # Stage for running tests
 FROM build AS testrunner
@@ -28,14 +28,14 @@ RUN dotnet test --logger:trx
 # Publish the application
 FROM build AS publish
 WORKDIR /src/Dierentuin
-RUN dotnet publish "Dierentuin.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Dierentuin.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false --no-restore
 
 # Add debug information to check paths and contents
 RUN ls -la /app/publish
 RUN pwd
 
 # Final stage / runtime
-FROM base AS final
+FROM base
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Dierentuin.dll"]
