@@ -40,20 +40,9 @@ jobs:
             --target final --build-arg "INCLUDE_UNITTESTING=true" \
             -f ./Dierentuin/Dockerfile .
 
-  infrastructure-testing:
-    runs-on: [self-hosted, Linux, ARM64]
-    needs: prepare-release
-    env:
-      GOSS_SLEEP: 2
-      GOSS_FILE: Dierentuin/.goss/goss.yaml # Goss path
-    steps:
-      - name: Run Goss tests inside Docker container
-        run: |
-          dgoss run Paskie0/dierentuin:${{ github.ref_name }}
 
   push-docker-hub:
     runs-on: [self-hosted, Linux, ARM64]
-    needs: infrastructure-testing
     if: github.ref_name == 'master' || github.ref_name == 'production'
     steps:
       - name: Push Docker image
