@@ -1,3 +1,4 @@
+
 name: Create, test and Publish Dotnet Release
 
 on:
@@ -16,16 +17,16 @@ jobs:
     - name: Build and cache Docker image
       run: |
         docker build --no-cache \
-          -t Paskie0/Dierentuin:${{ github.ref_name }} \
+          -t Paskie0/dierentuin:${{ github.ref_name }} \
           --target build --build-arg "INCLUDE_UNITTESTING=true" \
-          -f ./DierenTuin/Dockerfile .
+          -f ./Dierentuin/Dockerfile .
 
   unittesting:
     runs-on: [self-hosted, Linux, ARM64]
     needs: build
     steps:
       - name: Run dotnet tests inside Docker container
-        run: docker run --entrypoint "" Paksie0/dierentuin:${{ github.ref_name }} dotnet test
+        run: docker run --entrypoint "" Paskie0/dierentuin:${{ github.ref_name }} dotnet test
 
   prepare-release:
     runs-on: [self-hosted, Linux, ARM64]
@@ -38,8 +39,8 @@ jobs:
           docker build \
             -t Paskie0/dierentuin:${{ github.ref_name }} \
             --target final --build-arg "INCLUDE_UNITTESTING=true" \
-            -f ./DierenTuin/Dockerfile .
-        
+            -f ./Dierentuin/Dockerfile .
+
   infrastructure-testing:
     runs-on: [self-hosted, Linux, ARM64]
     needs: prepare-release
@@ -47,12 +48,8 @@ jobs:
       GOSS_SLEEP: 2
       GOSS_FILE: .goss/goss.yaml # Goss path
     steps:
-    
-      # Incomplete
-    
       - name: Run Goss tests inside Docker container
         run: |
-          # Combine all goss files
           dgoss run Paskie0/dierentuin:${{ github.ref_name }}
 
   push-docker-hub:
@@ -60,9 +57,6 @@ jobs:
     needs: infrastructure-testing
     if: github.ref_name == 'master' || github.ref_name == 'production'
     steps:
-    
-      # Incomplete
-
       - name: Push Docker image
         run: |
           docker push Paskie0/dierentuin:latest
