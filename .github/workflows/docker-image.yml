@@ -1,4 +1,3 @@
-
 name: Create, test and Publish Dotnet Release
 
 on:
@@ -39,9 +38,10 @@ jobs:
             -t Paskie0/dierentuin:${{ github.ref_name }} \
             --target final --build-arg "INCLUDE_UNITTESTING=true" \
             -f ./Dierentuin/Dockerfile .
-            
+
   push-docker-hub:
     runs-on: [self-hosted, Linux, ARM64]
+    needs: prepare-release
     if: github.ref_name == 'master' || github.ref_name == 'production'
     steps:
       - name: Push Docker image
