@@ -33,7 +33,6 @@ jobs:
     needs: unittesting
     steps:
       - name: Docker build as final
-        # Unittesting is still on true, so we can use build cache. Goss checks that Unittesting is not in release version!
         run: |
           echo "var: "${{ needs.build.outputs.docker_tag_version }} && \
           docker build \
