@@ -10,15 +10,15 @@ jobs:
   build:
     runs-on: [self-hosted, Linux, ARM64]
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Build and cache Docker image
-      run: |
-        docker build --no-cache \
-          -t Paskie0/dierentuin:${{ github.ref_name }} \
-          --target build --build-arg "INCLUDE_UNITTESTING=true" \
-          -f ./Dierentuin/Dockerfile .
+      - name: Build and cache Docker image
+        run: |
+          docker build --no-cache \
+            -t Paskie0/dierentuin:${{ github.ref_name }} \
+            --target build --build-arg "INCLUDE_UNITTESTING=true" \
+            -f ./Dierentuin/Dockerfile .
 
   unittesting:
     runs-on: [self-hosted, Linux, ARM64]
@@ -42,7 +42,6 @@ jobs:
   push-docker-hub:
     runs-on: [self-hosted, Linux, ARM64]
     needs: prepare-release
-    if: github.ref_name == 'master' || github.ref_name == 'production'
     steps:
       - name: Push Docker image
         run: |
