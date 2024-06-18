@@ -25,7 +25,7 @@ jobs:
     needs: build
     steps:
       - name: Run dotnet tests inside Docker container
-        run: docker run --entrypoint "" Paskie0/dierentuin:${{ github.ref_name }} dotnet test
+        run: docker run --entrypoint "" niloyan/dierentuin:${{ github.ref_name }} dotnet test
 
   prepare-release:
     runs-on: [self-hosted, Linux, ARM64]
