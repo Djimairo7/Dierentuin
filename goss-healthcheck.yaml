@@ -1,0 +1,7 @@
+http:
+  check80:
+    url: http://localhost/home/check
+    status: 200
+    timeout: 500
+    body:
+      - "RAM OK ROM OK"
