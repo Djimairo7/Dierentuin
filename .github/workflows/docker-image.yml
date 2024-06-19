@@ -38,6 +38,22 @@ jobs:
             -t niloyan/dierentuin:${{ github.ref_name }} \
             --target final --build-arg "INCLUDE_UNITTESTING=true" \
             -f ./Dierentuin/Dockerfile .
+            
+  infrastructure-testing:
+      runs-on: [self-hosted, Linux, ARM64]
+      needs: prepare-release
+      env:
+        GOSS_SLEEP: 2
+        GOSS_FILE: ./goss.yaml 
+      #Goss path
+      
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+
+        - name: Run Goss tests inside Docker container
+          run: | # Combine all goss files 
+            dgoss run ${{ secrets.DOCKER_USERNAME }}/dierentuin:${{ github.ref_name }}
 
   push-docker-hub:
     runs-on: [self-hosted, Linux, ARM64]
