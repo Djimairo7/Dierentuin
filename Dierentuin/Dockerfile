@@ -29,23 +29,4 @@ RUN dotnet publish "Dierentuin.csproj" -c $BUILD_CONFIGURATION -o /app/publish /
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-#Install Goss for HealthCheck and Pipeline run
-USER root
-RUN apt update && apt install -y curl
-RUN ARCH=$(uname -m) && \
-    if [ "$ARCH" = "aarch64" ]; then \
-      curl -L https://github.com/goss-org/goss/releases/download/v0.4.7/goss-linux-arm -o /usr/local/bin/goss; \
-    elif [ "$ARCH" = "x86_64" ]; then \
-      curl -L https://github.com/goss-org/goss/releases/download/v0.4.7/goss-linux-amd64 -o /usr/local/bin/goss; \
-    else \
-      echo "Unsupported architecture: $ARCH"; exit 1; \
-    fi && \
-    chmod +x /usr/local/bin/goss && \
-    rm -rf /var/lib/apt/lists/* && \
-    mkdir /goss && \
-    ln -s /usr/local/bin/goss /goss/goss
-USER app
-#Voeg je Goss configuratiebestand toe aan de container
-COPY /goss-healthcheck.yaml /goss.yaml
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 CMD goss validate --format documentation
 ENTRYPOINT ["dotnet", "Dierentuin.dll"]
