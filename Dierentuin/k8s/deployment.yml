@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dierentuin-deployment
+  labels:
+    app: dierentuin
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dierentuin
+  template:
+    metadata:
+      labels:
+        app: dierentuin
+    spec:
+      containers:
+      - name: dierentuin
+        image: niloyan/dierentuin:latest
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dierentuin-service
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8080
+    targetPort: 8080
+  selector:
+    app: dierentuin
