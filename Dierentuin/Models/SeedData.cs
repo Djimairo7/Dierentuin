@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using Dierentuin.Data; // Add this directive
 using Dierentuin.Models;
+using Bogus;
 
 namespace Dierentuin.Models
 {
@@ -30,50 +31,43 @@ namespace Dierentuin.Models
 
                 if (!context.Enclosures.Any())
                 {
-                    context.Enclosures.AddRange(
-                        new Enclosure
-                        {
-                            Name = "Savannah Exhibit",
-                            Climate = Enclosure.ClimateType.Temperate,
-                            Habitat = Enclosure.HabitatTypes.Grassland,
-                            Security = Enclosure.SecurityLevel.Medium,
-                            Size = 200.0,
-                        },
-                        new Enclosure
-                        {
-                            Name = "Tropical Rainforest",
-                            Climate = Enclosure.ClimateType.Tropical,
-                            Habitat = Enclosure.HabitatTypes.Forest,
-                            Security = Enclosure.SecurityLevel.High,
-                            Size = 300.0,
-                        }
-                    );
+                    var enclosureFaker = new Faker<Enclosure>()
+                    .RuleFor(e => e.Name, f => f.Address.City())
+                    .RuleFor(e => e.Climate, f => f.PickRandom<Enclosure.ClimateTypes>())
+                    .RuleFor(e => e.Habitat, f => f.PickRandom<Enclosure.HabitatTypes>())
+                    .RuleFor(e => e.Security, f => f.PickRandom<Enclosure.SecurityLevel>())
+                    .RuleFor(e => e.Size, f => f.Random.Int(5, 500));
 
+                    var fakeEnclosures = enclosureFaker.Generate(10);
+
+                    context.Enclosures.AddRange(fakeEnclosures);
                     context.SaveChanges();
                 }
 
                 if (!context.Animals.Any())
                 {
-                    var mammals = context.Categories.First(c => c.Name == "Mammals");
-                    var savannahExhibit = context.Enclosures.First(e => e.Name == "Savannah Exhibit");
+                    string[] species = ["Dog", "Cat", "Lion", "Elephant", "Horse", "Snake", "Wolf", "Bear", "Turtle", "Red Panda", "Giraffe", "Koala", "Shark"];
+                    string[] prey = ["Mouse", "Deer", "Horse", "Rabbit", "Boar", "Zebra", "Sheep", "Buffalo"];
 
-                    context.Animals.AddRange(
-                        new Animal
-                        {
-                            Name = "Harry",
-                            Species = "Dog",
-                            Size = Animal.AnimalSize.Medium,
-                            Diet = Animal.DietaryClass.Carnivore,
-                            Activity = Animal.ActivityPattern.Diurnal,
-                            Prey = "None",
-                            Enclosure = savannahExhibit, // Assign Enclosure
-                            EnclosureId = savannahExhibit.Id, // Assign EnclosureId
-                            Space = 10,
-                            Security = Animal.SecurityLevel.Low,
-                            Category = mammals
-                        }
-                    );
+                    var categories = context.Categories.ToList();
+                    var enclosures = context.Enclosures.ToList();
 
+                    var animalFaker = new Faker<Animal>()
+                        .RuleFor(a => a.Name, f => f.Name.FirstName())
+                        .RuleFor(a => a.Species, f => f.PickRandom(species))
+                        .RuleFor(a => a.Size, f => f.PickRandom<Animal.AnimalSize>())
+                        .RuleFor(a => a.Diet, f => f.PickRandom<Animal.DietaryClass>())
+                        .RuleFor(a => a.Activity, f => f.PickRandom<Animal.ActivityPattern>())
+                        .RuleFor(a => a.Prey, f => f.PickRandom(prey))
+                        .RuleFor(a => a.Enclosure, f => f.PickRandom(enclosures))
+                        .RuleFor(a => a.EnclosureId, (f, a) => a.Enclosure?.Id)
+                        .RuleFor(a => a.Space, f => f.Random.Int(5, 30))
+                        .RuleFor(a => a.Security, f => f.PickRandom<Animal.SecurityLevel>())
+                        .RuleFor(a => a.Category, f => f.PickRandom(categories));
+
+                    var fakeAnimals = animalFaker.Generate(30); // Generate 10 fake animals
+
+                    context.Animals.AddRange(fakeAnimals);
                     context.SaveChanges();
                 }
             }

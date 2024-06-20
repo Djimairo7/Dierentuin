@@ -20,7 +20,7 @@
             <div class="form-group">
                 <label asp-for="Climate" class="control-label"></label>
                 <select asp-for="Climate" class="form-control">
-                    @foreach (var climate in Enum.GetValues(typeof(Dierentuin.Models.Enclosure.ClimateType)))
+                    @foreach (var climate in Enum.GetValues(typeof(Dierentuin.Models.Enclosure.ClimateTypes)))
                     {
                         <option value="@climate">@climate</option>
                     }
