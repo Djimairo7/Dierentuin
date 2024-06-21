@@ -53,25 +53,4 @@ jobs:
       - name: Push Docker image
         run: |
           docker push niloyan/dierentuin:${{ github.ref_name }}
-  deploy:
-    runs-on: [self-hosted, Linux, ARM64]
-    needs: push-docker-hub
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Kubectl for ARM64
-        run: |
-          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/arm64/kubectl"
-          chmod +x ./kubectl
-          sudo mv ./kubectl /usr/local/bin/kubectl
-      - name: Print current directory and list all files for debugging
-        run: |
-          pwd
-          ls -la
-      - name: List files in the k8s directory
-        run: |
-          ls -la ./Dierentuin/k8s/
-      - name: Apply Kubernetes Manifests
-        run: |
-          kubectl apply --validate=false -f ./Dierentuin/k8s/deployment.yml
+ 
