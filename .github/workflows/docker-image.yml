@@ -1,54 +1,68 @@
-name: CI/CD Pipeline
+name: Full CI/CD Pipeline for .NET Application
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "*" ]
   pull_request:
-    branches:
-      - main
+    branches: [ "*" ]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, ARM64]
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        # Haalt de meest recente code van de main branch op
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-        # Configureert Docker Buildx voor geavanceerde build-opties
+      - name: Build and cache Docker image
+        run: |
+          docker build --no-cache \
+            -t niloyan/dierentuin:${{ github.ref_name }} \
+            --target build --build-arg "INCLUDE_UNITTESTING=true" \
+            -f ./Dierentuin/Dockerfile .
 
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-        # Logt in op Docker Hub met de gegevens die als geheimen zijn opgeslagen in je GitHub repository
+  unittesting:
+    runs-on: [self-hosted, Linux, ARM64]
+    needs: build
+    steps:
+      - name: Run dotnet tests inside Docker container
+        run: docker run --entrypoint "" niloyan/dierentuin:${{ github.ref_name }} dotnet test
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: yourusername/yourimage:latest
-        # Bouwt het Docker-image en pusht het naar Docker Hub onder de opgegeven tag
+  prepare-release:
+    runs-on: [self-hosted, Linux, ARM64]
+    needs: unittesting
+    steps:
+      - name: Docker build as final
+        run: |
+          echo "var: "${{ needs.build.outputs.docker_tag_version }} && \
+          docker build \
+            -t niloyan/dierentuin:${{ github.ref_name }} \
+            --target final --build-arg "INCLUDE_UNITTESTING=true" \
+            -f ./Dierentuin/Dockerfile .
+
+  push-docker-hub:
+    runs-on: [self-hosted, Linux, ARM64]
+    needs: prepare-release
+    steps:
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Push Docker image
+        run: |
+          docker push niloyan/dierentuin:${{ github.ref_name }}
 
   deploy:
-    needs: build
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, ARM64]
+    needs: push-docker-hub
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        # Haalt de code opnieuw op voor gebruik in de deployment fase
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Install kubectl
-        run: bash ./scripts/install-kubectl.sh
-        # Voert een shell script uit om kubectl te installeren, zorg dat dit script in je repo staat onder de map scripts
+      - name: Set up Kubectl
+        run: |
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x ./kubectl
+          sudo mv ./kubectl /usr/local/bin/kubectl
 
       - name: Apply Kubernetes Manifests
-        run: kubectl apply -f ./k8s/deployment.yaml
-        # Past de Kubernetes manifesten toe vanuit de gespecificeerde directory en bestand
-
+        run: |
+          kubectl apply -f k8s/deployment.yml
