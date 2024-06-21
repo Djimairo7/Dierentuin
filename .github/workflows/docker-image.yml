@@ -1,4 +1,4 @@
-name: Full CI/CD Pipeline for .NET Application
+name: CI/CD Pipeline for C# MVC Project
 
 on:
   push:
