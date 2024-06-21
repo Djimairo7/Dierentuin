@@ -13,6 +13,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Print working directory
+        run: pwd
+
+      - name: List files in project root
+        run: ls -la
+
       - name: Build and cache Docker image
         run: |
           docker build --no-cache \
@@ -63,6 +69,15 @@ jobs:
           chmod +x ./kubectl
           sudo mv ./kubectl /usr/local/bin/kubectl
 
+      - name: Print current directory and list all files for debugging
+        run: |
+          pwd
+          ls -la
+
+      - name: List files in the k8s directory
+        run: |
+          ls -la ./Dierentuin/k8s/
+
       - name: Apply Kubernetes Manifests
         run: |
-          kubectl apply -f k8s/deployment.yml
+          kubectl apply -f ./Dierentuin/k8s/deployment.yml
