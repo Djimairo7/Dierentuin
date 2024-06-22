@@ -28,7 +28,7 @@
         <dd class="col-sm-10">
             @if (Model.Category != null)
             {
-                @Html.DisplayFor(model => model.Category.Name)
+                @Html.DisplayFor(model => model.Category!.Name)
             }
             else
             {
@@ -65,7 +65,7 @@
         <dd class="col-sm-10">
             @if (Model.Enclosure != null)
             {
-                @Html.DisplayFor(model => model.Enclosure.Name)
+                @Html.DisplayFor(model => model.Enclosure!.Name)
             }
             else
             {

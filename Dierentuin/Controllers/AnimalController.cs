@@ -18,13 +18,20 @@ namespace Dierentuin.Controllers
         }
 
         // GET: Animal
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string search)
         {
-            var animals = await _context.Animals
+            var animals =
+                from a in _context.Animals
                 .Include(a => a.Category)
                 .Include(a => a.Enclosure)
-                .ToListAsync();
-            return View(animals);
+                select a;
+
+            if (!String.IsNullOrEmpty(search))
+            {
+                animals = animals.Where(a => a.Name.Contains(search));
+            }
+
+            return View(await animals.ToListAsync());
         }
 
         public async Task<IActionResult> ByCategory(int? id)
