@@ -3,6 +3,7 @@ using System;
 using Dierentuin.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dierentuin.Migrations
 {
     [DbContext(typeof(DierentuinContext))]
-    partial class DierentuinContextModelSnapshot : ModelSnapshot
+    [Migration("20240612110351_EnclosureContext")]
+    partial class EnclosureContext
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.4");
@@ -110,7 +113,7 @@ namespace Dierentuin.Migrations
             modelBuilder.Entity("Dierentuin.Models.Animal", b =>
                 {
                     b.HasOne("Dierentuin.Models.Category", "Category")
-                        .WithMany("Animals")
+                        .WithMany()
                         .HasForeignKey("CategoryId");
 
                     b.HasOne("Dierentuin.Models.Enclosure", "Enclosure")
@@ -120,11 +123,6 @@ namespace Dierentuin.Migrations
                     b.Navigation("Category");
 
                     b.Navigation("Enclosure");
-                });
-
-            modelBuilder.Entity("Dierentuin.Models.Category", b =>
-                {
-                    b.Navigation("Animals");
                 });
 
             modelBuilder.Entity("Dierentuin.Models.Enclosure", b =>

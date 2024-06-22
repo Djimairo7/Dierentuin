@@ -4,14 +4,14 @@ public class Enclosure
 {
     public int Id { get; set; }
     public required string Name { get; set; }
-    public required List<Animal> Animals { get; set; }
-    public enum ClimateType
+    public List<Animal> Animals { get; set; } = new List<Animal>();
+    public enum ClimateTypes
     {
         Tropical,
         Temperate,
         Arctic
     }
-    public required ClimateType Climate { get; set; }
+    public required ClimateTypes Climate { get; set; }
     public enum HabitatType
     {
         Forest,

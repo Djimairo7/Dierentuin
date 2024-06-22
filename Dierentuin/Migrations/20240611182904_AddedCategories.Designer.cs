@@ -3,6 +3,7 @@ using System;
 using Dierentuin.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dierentuin.Migrations
 {
     [DbContext(typeof(DierentuinContext))]
-    partial class DierentuinContextModelSnapshot : ModelSnapshot
+    [Migration("20240611182904_AddedCategories")]
+    partial class AddedCategories
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.4");
@@ -26,11 +29,15 @@ namespace Dierentuin.Migrations
                     b.Property<int>("Activity")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("CategoryId")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Diet")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Enclosure")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("EnclosureId")
                         .HasColumnType("INTEGER");
@@ -111,15 +118,15 @@ namespace Dierentuin.Migrations
                 {
                     b.HasOne("Dierentuin.Models.Category", "Category")
                         .WithMany("Animals")
-                        .HasForeignKey("CategoryId");
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Dierentuin.Models.Enclosure", "Enclosure")
+                    b.HasOne("Dierentuin.Models.Enclosure", null)
                         .WithMany("Animals")
                         .HasForeignKey("EnclosureId");
 
                     b.Navigation("Category");
-
-                    b.Navigation("Enclosure");
                 });
 
             modelBuilder.Entity("Dierentuin.Models.Category", b =>

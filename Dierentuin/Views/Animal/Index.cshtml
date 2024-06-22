@@ -1,14 +1,20 @@
 @model IEnumerable<Dierentuin.Models.Animal>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Animals";
 }
 
-<h1>Index</h1>
+<h1>Animals</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+<form asp-controller="Animal" asp-action="Index" method="get">
+    <p>
+        <input type="text" name="search" />
+        <input type="submit" value="Search" />
+    </p>
+</form>
 <table class="table">
     <thead>
         <tr>
@@ -46,44 +52,59 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Species)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Size)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Diet)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Activity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Prey)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Enclosure)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Space)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Security)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Species)
+                </td>
+                <td>
+                    @if (item.Category != null)
+                    {
+                        @Html.DisplayFor(modelItem => item.Category.Name)
+                    }
+                    else
+                    {
+                        <text>None</text>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Size)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Diet)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Activity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Prey)
+                </td>
+                <td>
+                    @if (item.Enclosure != null)
+                    {
+                        @Html.DisplayFor(modelItem => item.Enclosure.Name)
+                    }
+                    else
+                    {
+                        <text>None</text>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Space)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Security)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

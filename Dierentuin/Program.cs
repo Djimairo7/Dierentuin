@@ -15,10 +15,9 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-
     var context = services.GetRequiredService<DierentuinContext>();
-    context.Database.Migrate();
 
+    context.Database.Migrate();
     SeedData.Initialize(services);
 }
 
@@ -40,5 +39,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapControllers();
 
 app.Run();

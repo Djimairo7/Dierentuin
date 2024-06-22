@@ -5,7 +5,8 @@ public class Animal
     public int Id { get; set; }
     public required string Name { get; set; }
     public required string Species { get; set; }
-    public required string Category { get; set; }
+    public int? CategoryId { get; set; }
+    public Category? Category { get; set; }
     public enum AnimalSize
     {
         Microscopic,
@@ -33,7 +34,8 @@ public class Animal
     }
     public required ActivityPattern Activity { get; set; }
     public required string Prey { get; set; }
-    public required string Enclosure { get; set; }
+    public Enclosure? Enclosure { get; set; } // Navigation property
+    public int? EnclosureId { get; set; } // Foreign key
     public required double Space { get; set; }
     public enum SecurityLevel
     {
