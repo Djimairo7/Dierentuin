@@ -2,9 +2,9 @@ name: CI/CD Pipeline for C# MVC Project
 
 on:
   push:
-    branches: [ "*" ]
+    branches: ["*"]
   pull_request:
-    branches: [ "*" ]
+    branches: ["*"]
 
 jobs:
   build:
@@ -25,7 +25,7 @@ jobs:
             -t niloyan/dierentuin:${{ github.ref_name }} \
             --target build --build-arg "INCLUDE_UNITTESTING=true" \
             -f ./Dierentuin/Dockerfile .
-  
+
   unittesting:
     runs-on: [self-hosted, Linux, ARM64]
     needs: build
@@ -43,7 +43,7 @@ jobs:
             -t niloyan/dierentuin:${{ github.ref_name }} \
             --target final --build-arg "INCLUDE_UNITTESTING=true" \
             -f ./Dierentuin/Dockerfile .
-  
+
   push-docker-hub:
     runs-on: [self-hosted, Linux, ARM64]
     needs: prepare-release
@@ -64,7 +64,7 @@ jobs:
           echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
 
       - name: Apply deploy.yml
-        run: kubectl apply -f deploy.yml
+        run: kubectl apply -f k8s/deploy.yml
 
       - name: Kube Rollout (restart)
         run: kubectl rollout restart deployment/group01
