@@ -62,6 +62,20 @@ jobs:
         run: |
           mkdir -p ~/.kube
           echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
+          
+      - name: Debug Kubeconfig
+        run: |
+          echo "Kubeconfig content:"
+          cat ~/.kube/config
+          echo "Kubeconfig context:"
+          kubectl config get-contexts
+        shell: bash
+
+      - name: Test Kubernetes Connection
+        run: |
+          echo "Testing kubectl connection:"
+          kubectl cluster-info
+        shell: bash
 
       - name: Apply deploy.yml
         run: kubectl apply -f k8s/deploy.yml
