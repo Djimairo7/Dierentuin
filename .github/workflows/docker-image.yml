@@ -53,3 +53,18 @@ jobs:
 
       - name: Push Docker image
         run: docker push niloyan/dierentuin:${{ github.ref_name }}
+
+  deploy:
+    runs-on: [self-hosted, Linux, ARM64]
+    needs: push-docker-hub
+    steps:
+      - name: Setup Kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
+
+      - name: Apply deploy.yml
+        run: kubectl apply -f deploy.yml
+
+      - name: Kube Rollout (restart)
+        run: kubectl rollout restart deployment/group01
