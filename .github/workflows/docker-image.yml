@@ -26,7 +26,7 @@ jobs:
             --target build --build-arg "INCLUDE_UNITTESTING=true" \
             -f ./Dierentuin/Dockerfile .
 
-  unittesting:
+  unit-testing:
     runs-on: [self-hosted, Linux, ARM64]
     needs: build
     steps:
@@ -35,7 +35,7 @@ jobs:
 
   prepare-release:
     runs-on: [self-hosted, Linux, ARM64]
-    needs: unittesting
+    needs: unit-testing
     steps:
       - name: Docker build as final
         run: |
