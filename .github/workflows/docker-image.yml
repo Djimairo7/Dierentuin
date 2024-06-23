@@ -13,6 +13,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Cache NuGet packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
       - name: Print working directory
         run: pwd
 
