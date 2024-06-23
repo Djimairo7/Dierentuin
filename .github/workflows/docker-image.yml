@@ -21,7 +21,7 @@ jobs:
 
       - name: Build and cache Docker image
         run: |
-          docker build --no-cache \
+          docker build \
             -t niloyan/dierentuin:${{ github.ref_name }} \
             --target build --build-arg "INCLUDE_UNITTESTING=true" \
             -f ./Dierentuin/Dockerfile .
@@ -62,7 +62,7 @@ jobs:
         run: |
           mkdir -p ~/.kube
           echo "${{ secrets.KUBECONFIG_CONTENT }}" > ~/.kube/config
-          
+
       - name: Debug Kubeconfig
         run: |
           echo "Kubeconfig content:"
