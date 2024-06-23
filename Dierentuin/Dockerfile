@@ -11,8 +11,8 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Dierentuin/Dierentuin.csproj", "Dierentuin/"]
 COPY ["TestProject1/TestProject1.csproj", "TestProject1/"]
-RUN dotnet restore "Dierentuin/Dierentuin.csproj"
-RUN dotnet restore "TestProject1/TestProject1.csproj"
+RUN dotnet restore "Dierentuin/Dierentuin.csproj" && \
+    dotnet restore "TestProject1/TestProject1.csproj"
 COPY . .
 WORKDIR "/src/Dierentuin"
 RUN dotnet build "Dierentuin.csproj" -c $BUILD_CONFIGURATION -o /app/build

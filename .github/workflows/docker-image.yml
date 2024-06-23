@@ -13,28 +13,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: "8.0.x"
-
-      - name: Cache NuGet packages
-        id: cache-nuget
-        uses: actions/cache@v3
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
-
       - name: Print working directory
         run: pwd
 
       - name: List files in project root
         run: ls -la
-
-      - name: Restore NuGet packages
-        run: dotnet restore Dierentuin/Dierentuin.csproj
 
       - name: Build and cache Docker image
         run: |
@@ -42,13 +25,6 @@ jobs:
             -t niloyan/dierentuin:${{ github.ref_name }} \
             --target build --build-arg "INCLUDE_UNITTESTING=true" \
             -f ./Dierentuin/Dockerfile .
-
-      - name: Save NuGet cache
-        if: steps.cache-nuget.outputs.cache-hit != 'true'
-        uses: actions/cache@v3
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
 
   unit-testing:
     runs-on: [self-hosted, Linux, ARM64]
@@ -86,20 +62,6 @@ jobs:
         run: |
           mkdir -p ~/.kube
           echo "${{ secrets.KUBECONFIG_CONTENT }}" > ~/.kube/config
-
-      - name: Debug Kubeconfig
-        run: |
-          echo "Kubeconfig content:"
-          cat ~/.kube/config
-          echo "Kubeconfig context:"
-          kubectl config get-contexts
-        shell: bash
-
-      - name: Test Kubernetes Connection
-        run: |
-          echo "Testing kubectl connection:"
-          kubectl cluster-info
-        shell: bash
 
       - name: Apply deploy.yml
         run: kubectl apply -f k8s/deploy.yml
