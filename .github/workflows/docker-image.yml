@@ -9,8 +9,6 @@ on:
 jobs:
   build:
     runs-on: [self-hosted, Linux, ARM64]
-    env:
-      SANITIZED_GITHUB_REF: ${{ github.ref.name }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -22,57 +20,55 @@ jobs:
         run: ls -la
 
       - name: Sanitize GitHub ref name
-        run: echo "SANITIZED_GITHUB_REF=${SANITIZED_GITHUB_REF//[\/:]/-}" >> $GITHUB_ENV
+        id: sanitize
+        run: echo "::set-output name=ref_name::$(echo ${GITHUB_REF#refs/heads/} | sed 's/[\/:]/-/g')"
 
       - name: Build and cache Docker image
         run: |
           docker build \
-            -t niloyan/dierentuin:${{ env.SANITIZED_GITHUB_REF }} \
+            -t niloyan/dierentuin:${{ steps.sanitize.outputs.ref_name }} \
             --target build --build-arg "INCLUDE_UNITTESTING=true" \
             -f ./Dierentuin/Dockerfile .
 
   unit-testing:
     runs-on: [self-hosted, Linux, ARM64]
     needs: build
-    env:
-      SANITIZED_GITHUB_REF: ${{ github.ref.name }}
     steps:
       - name: Sanitize GitHub ref name
-        run: echo "SANITIZED_GITHUB_REF=${SANITIZED_GITHUB_REF//[\/:]/-}" >> $GITHUB_ENV
+        id: sanitize
+        run: echo "::set-output name=ref_name::$(echo ${GITHUB_REF#refs/heads/} | sed 's/[\/:]/-/g')"
 
       - name: Run dotnet tests inside Docker container
-        run: docker run --entrypoint "" niloyan/dierentuin:${{ env.SANITIZED_GITHUB_REF }} dotnet test
+        run: docker run --entrypoint "" niloyan/dierentuin:${{ steps.sanitize.outputs.ref_name }} dotnet test
 
   prepare-release:
     runs-on: [self-hosted, Linux, ARM64]
     needs: unit-testing
-    env:
-      SANITIZED_GITHUB_REF: ${{ github.ref.name }}
     steps:
       - name: Sanitize GitHub ref name
-        run: echo "SANITIZED_GITHUB_REF=${SANITIZED_GITHUB_REF//[\/:]/-}" >> $GITHUB_ENV
+        id: sanitize
+        run: echo "::set-output name=ref_name::$(echo ${GITHUB_REF#refs/heads/} | sed 's/[\/:]/-/g')"
 
       - name: Docker build as final
         run: |
           docker build \
-            -t niloyan/dierentuin:${{ env.SANITIZED_GITHUB_REF }} \
+            -t niloyan/dierentuin:${{ steps.sanitize.outputs.ref_name }} \
             --target final --build-arg "INCLUDE_UNITTESTING=true" \
             -f ./Dierentuin/Dockerfile .
 
   push-docker-hub:
     runs-on: [self-hosted, Linux, ARM64]
     needs: prepare-release
-    env:
-      SANITIZED_GITHUB_REF: ${{ github.ref.name }}
     steps:
       - name: Sanitize GitHub ref name
-        run: echo "SANITIZED_GITHUB_REF=${SANITIZED_GITHUB_REF//[\/:]/-}" >> $GITHUB_ENV
+        id: sanitize
+        run: echo "::set-output name=ref_name::$(echo ${GITHUB_REF#refs/heads/} | sed 's/[\/:]/-/g')"
 
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Push Docker image
-        run: docker push niloyan/dierentuin:${{ github.ref_name }}
+        run: docker push niloyan/dierentuin:${{ steps.sanitize.outputs.ref_name }}
 
   deploy:
     runs-on: [self-hosted, Linux, ARM64]
