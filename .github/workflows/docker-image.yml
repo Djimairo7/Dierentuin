@@ -19,10 +19,14 @@ jobs:
       - name: List files in project root
         run: ls -la
 
+      - name: Sanitize GitHub ref name
+        id: sanitize
+        run: echo "::set-output name=ref_name::$(echo ${GITHUB_REF#refs/heads/} | sed 's/[\/:]/-/g')"
+
       - name: Build and cache Docker image
         run: |
           docker build \
-            -t niloyan/dierentuin:${{ github.ref_name }} \
+            -t niloyan/dierentuin:${{ steps.sanitize.outputs.ref_name }} \
             --target build --build-arg "INCLUDE_UNITTESTING=true" \
             -f ./Dierentuin/Dockerfile .
 
