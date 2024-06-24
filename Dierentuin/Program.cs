@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Dierentuin.Data;
 using Dierentuin.Models;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<DierentuinContext>(options =>
@@ -9,6 +9,9 @@ builder.Services.AddDbContext<DierentuinContext>(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Add health checks and Prometheus metrics
+builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
@@ -34,6 +37,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseHttpMetrics();
+
 app.UseAuthorization();
 
 app.MapControllerRoute(
@@ -41,5 +46,9 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapControllers();
+
+// Map Prometheus metrics and health check endpoints
+app.MapMetrics(); // Exposes metrics at /metrics
+app.MapHealthChecks("/health"); // Exposes health checks at /health
 
 app.Run();

@@ -68,3 +68,28 @@ jobs:
 
       - name: Kube Rollout (restart)
         run: kubectl rollout restart deployment/group01
+
+  setup-monitoring:
+    runs-on: [self-hosted, Linux, ARM64]
+    needs: deploy
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install docker-compose -y
+
+      - name: Build and run services
+        run: docker-compose up -d --build
+
+      - name: Wait for services to be up
+        run: |
+          echo "Waiting for Grafana and Prometheus to be up..."
+          sleep 30
+
+      - name: Display Grafana and Prometheus URLs
+        run: |
+          echo "Grafana is available at http://localhost:3000 (admin/admin)"
+          echo "Prometheus is available at http://localhost:9090"
