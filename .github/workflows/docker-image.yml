@@ -92,5 +92,11 @@ jobs:
       - name: Deploy Prometheus
         run: kubectl apply -f k8s/prometheus-deployment.yml
 
+      - name: Apply proper routing for Grafana
+        run: kubectl apply -f k8s/grafana-ingress.yml
+
       - name: Deploy Grafana
         run: kubectl apply -f k8s/grafana-deployment.yml
+
+      - name: Apply proper routing for Prometheus
+        run: kubectl apply -f k8s/prometheus-ingress.yml
