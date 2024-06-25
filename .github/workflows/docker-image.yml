@@ -23,9 +23,20 @@ jobs:
         id: sanitize
         run: echo "::set-output name=ref_name::$(echo ${GITHUB_REF#refs/heads/} | sed 's/[\/:]/-/g')"
 
+      - name: Ensure Docker is Installed and Running
+        run: |
+          if ! command -v docker &> /dev/null; then
+            echo "Docker is not installed. Installing Docker..."
+            curl -fsSL https://get.docker.com -o get-docker.sh
+            sh get-docker.sh
+            sudo usermod -aG docker $USER
+          fi
+          sudo systemctl enable docker
+          sudo systemctl start docker
+          sudo docker version
+
       - name: Build and cache Docker image
         run: |
-          sudo service docker start
           docker build \
             -t niloyan/dierentuin:${{ steps.sanitize.outputs.ref_name }} \
             --target build --build-arg "INCLUDE_UNITTESTING=true" \
