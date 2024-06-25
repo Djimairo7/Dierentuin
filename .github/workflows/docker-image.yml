@@ -19,10 +19,14 @@ jobs:
       - name: List files in project root
         run: ls -la
 
+      - name: Sanitize GitHub ref name
+        id: sanitize
+        run: echo "::set-output name=ref_name::$(echo ${GITHUB_REF#refs/heads/} | sed 's/[\/:]/-/g')"
+
       - name: Build and cache Docker image
         run: |
           docker build \
-            -t niloyan/dierentuin:${{ github.ref_name }} \
+            -t niloyan/dierentuin:${{ steps.sanitize.outputs.ref_name }} \
             --target build --build-arg "INCLUDE_UNITTESTING=true" \
             -f ./Dierentuin/Dockerfile .
 
@@ -30,17 +34,25 @@ jobs:
     runs-on: [self-hosted, Linux, ARM64]
     needs: build
     steps:
+      - name: Sanitize GitHub ref name
+        id: sanitize
+        run: echo "::set-output name=ref_name::$(echo ${GITHUB_REF#refs/heads/} | sed 's/[\/:]/-/g')"
+
       - name: Run dotnet tests inside Docker container
-        run: docker run --entrypoint "" niloyan/dierentuin:${{ github.ref_name }} dotnet test
+        run: docker run --entrypoint "" niloyan/dierentuin:${{ steps.sanitize.outputs.ref_name }} dotnet test
 
   prepare-release:
     runs-on: [self-hosted, Linux, ARM64]
     needs: unit-testing
     steps:
+      - name: Sanitize GitHub ref name
+        id: sanitize
+        run: echo "::set-output name=ref_name::$(echo ${GITHUB_REF#refs/heads/} | sed 's/[\/:]/-/g')"
+
       - name: Docker build as final
         run: |
           docker build \
-            -t niloyan/dierentuin:${{ github.ref_name }} \
+            -t niloyan/dierentuin:${{ steps.sanitize.outputs.ref_name }} \
             --target final --build-arg "INCLUDE_UNITTESTING=true" \
             -f ./Dierentuin/Dockerfile .
 
@@ -48,11 +60,15 @@ jobs:
     runs-on: [self-hosted, Linux, ARM64]
     needs: prepare-release
     steps:
+      - name: Sanitize GitHub ref name
+        id: sanitize
+        run: echo "::set-output name=ref_name::$(echo ${GITHUB_REF#refs/heads/} | sed 's/[\/:]/-/g')"
+
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Push Docker image
-        run: docker push niloyan/dierentuin:${{ github.ref_name }}
+        run: docker push niloyan/dierentuin:${{ steps.sanitize.outputs.ref_name }}
 
   deploy:
     runs-on: [self-hosted, Linux, ARM64]
@@ -68,3 +84,13 @@ jobs:
 
       - name: Kube Rollout (restart)
         run: kubectl rollout restart deployment/group01
+
+  deploy-monitoring:
+    runs-on: [self-hosted, Linux, ARM64]
+    needs: deploy
+    steps:
+      - name: Deploy Prometheus
+        run: kubectl apply -f k8s/prometheus-deployment.yml
+
+      - name: Deploy Grafana
+        run: kubectl apply -f k8s/grafana-deployment.yml
