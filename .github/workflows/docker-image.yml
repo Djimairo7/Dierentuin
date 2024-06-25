@@ -97,6 +97,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install docker-compose -y
 
+      - name: Ensure Docker is Running
+        run: |
+          sudo service docker start
+          sudo docker version
+
       - name: Build and run services
         run: docker-compose up -d --build
 
