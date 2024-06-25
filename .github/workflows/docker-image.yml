@@ -23,18 +23,6 @@ jobs:
         id: sanitize
         run: echo "::set-output name=ref_name::$(echo ${GITHUB_REF#refs/heads/} | sed 's/[\/:]/-/g')"
 
-      - name: Ensure Docker is Installed and Running
-        run: |
-          if ! command -v docker &> /dev/null; then
-            echo "Docker is not installed. Installing Docker..."
-            curl -fsSL https://get.docker.com -o get-docker.sh
-            sh get-docker.sh
-            sudo usermod -aG docker $USER
-          fi
-          sudo systemctl enable docker
-          sudo systemctl start docker
-          sudo docker version
-
       - name: Build and cache Docker image
         run: |
           docker build \
@@ -96,3 +84,19 @@ jobs:
 
       - name: Kube Rollout (restart)
         run: kubectl rollout restart deployment/group01
+
+  deploy-monitoring:
+    runs-on: [self-hosted, Linux, ARM64]
+    needs: deploy
+    steps:
+      - name: Deploy Prometheus
+        run: |
+          helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+          helm repo update
+          helm install prometheus prometheus-community/prometheus --namespace monitoring --create-namespace
+
+      - name: Deploy Grafana
+        run: |
+          helm repo add grafana https://grafana.github.io/helm-charts
+          helm repo update
+          helm install grafana grafana/grafana --namespace monitoring --create-namespace

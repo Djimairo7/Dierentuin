@@ -14,6 +14,9 @@ spec:
     metadata:
       labels:
         app: group01
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080" # Assuming your app runs on port 8080
     spec:
       containers:
         - name: group01
