@@ -25,6 +25,7 @@ jobs:
 
       - name: Build and cache Docker image
         run: |
+          sudo service docker start
           docker build \
             -t niloyan/dierentuin:${{ steps.sanitize.outputs.ref_name }} \
             --target build --build-arg "INCLUDE_UNITTESTING=true" \
