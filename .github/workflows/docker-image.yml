@@ -2,9 +2,11 @@ name: CI/CD Pipeline for C# MVC Project
 
 on:
   push:
-    branches: ["main"]
+    branches:
+      - main
   pull_request:
-    branches: ["main"]
+    branches:
+      - main
 
 jobs:
   build:
@@ -90,13 +92,7 @@ jobs:
     needs: deploy
     steps:
       - name: Deploy Prometheus
-        run: kubectl apply -f k8s/prometheus-deployment.yml
-
-      - name: Apply proper routing for Grafana
-        run: kubectl apply -f k8s/grafana-ingress.yml
+        run: kubectl apply -f k8s/prometheus.yml
 
       - name: Deploy Grafana
-        run: kubectl apply -f k8s/grafana-deployment.yml
-
-      - name: Apply proper routing for Prometheus
-        run: kubectl apply -f k8s/prometheus-ingress.yml
+        run: kubectl apply -f k8s/grafana.yml
