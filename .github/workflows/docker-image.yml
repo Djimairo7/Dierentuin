@@ -114,7 +114,7 @@ jobs:
     steps:
       - name: Health check
         run: |
-          STATUS_CODE=$(curl -L --write-out %{http_code} --silent --output /dev/null http://group01.web.dops.tech/health)
+          STATUS_CODE=$(curl -L --write-out %{http_code} --silent --output /dev/null "http://group01.web.dops.tech/health")
           if [ $STATUS_CODE -ne 200 ]; then
             echo "Health check failed with status code $STATUS_CODE"
             exit 1
