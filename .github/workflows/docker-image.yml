@@ -96,3 +96,17 @@ jobs:
 
       - name: Deploy Grafana
         run: kubectl apply -f k8s/grafana.yml
+
+  health-check:
+    runs-on: [self-hosted, Linux, ARM64]
+    needs: deploy-monitoring
+    steps:
+      - name: Health check
+        run: |
+          STATUS_CODE=$(curl --write-out %{http_code} --silent --output /dev/null http://group01-web-dops.tech/health)
+          if [ $STATUS_CODE -ne 200 ]; then
+            echo "Health check failed with status code $STATUS_CODE"
+            exit 1
+          else
+            echo "Health check passed"
+          fi
