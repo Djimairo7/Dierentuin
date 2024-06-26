@@ -41,11 +41,7 @@ jobs:
         run: echo "::set-output name=ref_name::$(echo ${GITHUB_REF#refs/heads/} | sed 's/[\/:]/-/g')"
 
       - name: Run dotnet tests inside Docker container
-        run: |
-          docker build -t niloyan/dierentuin:${{ steps.sanitize.outputs.ref_name }} \
-            --target unit-testing --build-arg "INCLUDE_UNITTESTING=true" \
-            -f ./Dierentuin/Dockerfile .
-          docker run --rm niloyan/dierentuin:${{ steps.sanitize.outputs.ref_name }} dotnet test
+        run: docker run --entrypoint "" niloyan/dierentuin:${{ steps.sanitize.outputs.ref_name }} dotnet test --logger:trx
 
   code-quality:
     runs-on: [self-hosted, Linux, ARM64]
@@ -56,10 +52,7 @@ jobs:
         run: echo "::set-output name=ref_name::$(echo ${GITHUB_REF#refs/heads/} | sed 's/[\/:]/-/g')"
 
       - name: Run dotnet format
-        run: |
-          docker build -t niloyan/dierentuin:${{ steps.sanitize.outputs.ref_name }} \
-            -f ./Dierentuin/Dockerfile .
-          docker run --rm niloyan/dierentuin:${{ steps.sanitize.outputs.ref_name }} dotnet format -v d
+        run: docker run --entrypoint "" niloyan/dierentuin:${{ steps.sanitize.outputs.ref_name }} dotnet format -v d
 
   prepare-release:
     runs-on: [self-hosted, Linux, ARM64]
