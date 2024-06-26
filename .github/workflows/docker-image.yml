@@ -11,8 +11,6 @@ on:
 jobs:
   build:
     runs-on: [self-hosted, Linux, ARM64]
-    outputs:
-      ref_name: ${{ steps.sanitize.outputs.ref_name }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -25,7 +23,7 @@ jobs:
 
       - name: Sanitize GitHub ref name
         id: sanitize
-        run: echo "ref_name=$(echo ${GITHUB_REF#refs/heads/} | sed 's/[\/:]/-/g')" >> $GITHUB_ENV
+        run: echo "::set-output name=ref_name::$(echo ${GITHUB_REF#refs/heads/} | sed 's/[\/:]/-/g')"
 
       - name: Build and cache Docker image
         run: |
@@ -38,28 +36,40 @@ jobs:
     runs-on: [self-hosted, Linux, ARM64]
     needs: build
     steps:
+      - name: Sanitize GitHub ref name
+        id: sanitize
+        run: echo "::set-output name=ref_name::$(echo ${GITHUB_REF#refs/heads/} | sed 's/[\/:]/-/g')"
+
       - name: Run dotnet tests inside Docker container
         run: |
-          docker build -t niloyan/dierentuin:${{ needs.build.outputs.ref_name }} .
-          docker run --rm niloyan/dierentuin:${{ needs.build.outputs.ref_name }} dotnet test
+          docker build --target unit-testing -t niloyan/dierentuin:${{ steps.sanitize.outputs.ref_name }} .
+          docker run --rm niloyan/dierentuin:${{ steps.sanitize.outputs.ref_name }} dotnet test
 
   code-quality:
     runs-on: [self-hosted, Linux, ARM64]
     needs: unit-testing
     steps:
+      - name: Sanitize GitHub ref name
+        id: sanitize
+        run: echo "::set-output name=ref_name::$(echo ${GITHUB_REF#refs/heads/} | sed 's/[\/:]/-/g')"
+
       - name: Run dotnet format
         run: |
-          docker build -t niloyan/dierentuin:${{ needs.build.outputs.ref_name }} .
-          docker run --rm niloyan/dierentuin:${{ needs.build.outputs.ref_name }} dotnet format -v d
+          docker build -t niloyan/dierentuin:${{ steps.sanitize.outputs.ref_name }} .
+          docker run --rm niloyan/dierentuin:${{ steps.sanitize.outputs.ref_name }} dotnet format -v d
 
   prepare-release:
     runs-on: [self-hosted, Linux, ARM64]
     needs: code-quality
     steps:
+      - name: Sanitize GitHub ref name
+        id: sanitize
+        run: echo "::set-output name=ref_name::$(echo ${GITHUB_REF#refs/heads/} | sed 's/[\/:]/-/g')"
+
       - name: Docker build as final
         run: |
           docker build \
-            -t niloyan/dierentuin:${{ needs.build.outputs.ref_name }} \
+            -t niloyan/dierentuin:${{ steps.sanitize.outputs.ref_name }} \
             --target final --build-arg "INCLUDE_UNITTESTING=true" \
             -f ./Dierentuin/Dockerfile .
 
@@ -67,11 +77,15 @@ jobs:
     runs-on: [self-hosted, Linux, ARM64]
     needs: prepare-release
     steps:
+      - name: Sanitize GitHub ref name
+        id: sanitize
+        run: echo "::set-output name=ref_name::$(echo ${GITHUB_REF#refs/heads/} | sed 's/[\/:]/-/g')"
+
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Push Docker image
-        run: docker push niloyan/dierentuin:${{ needs.build.outputs.ref_name }}
+        run: docker push niloyan/dierentuin:${{ steps.sanitize.outputs.ref_name }}
 
   deploy:
     runs-on: [self-hosted, Linux, ARM64]
