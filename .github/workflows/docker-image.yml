@@ -43,9 +43,16 @@ jobs:
       - name: Run dotnet tests inside Docker container
         run: docker run --entrypoint "" niloyan/dierentuin:${{ steps.sanitize.outputs.ref_name }} dotnet test
 
-  prepare-release:
+  code-quality:
     runs-on: [self-hosted, Linux, ARM64]
     needs: unit-testing
+    steps:
+      - name: Run dotnet format
+        run: dotnet format -v d
+
+  prepare-release:
+    runs-on: [self-hosted, Linux, ARM64]
+    needs: code-quality
     steps:
       - name: Sanitize GitHub ref name
         id: sanitize
@@ -87,7 +94,7 @@ jobs:
       - name: Kube Rollout (restart)
         run: kubectl rollout restart deployment/group01
 
-  deploy-monitoring:
+  monitoring:
     runs-on: [self-hosted, Linux, ARM64]
     needs: deploy
     steps:
@@ -99,7 +106,7 @@ jobs:
 
   health-check:
     runs-on: [self-hosted, Linux, ARM64]
-    needs: deploy-monitoring
+    needs: monitoring
     steps:
       - name: Health check
         run: |
