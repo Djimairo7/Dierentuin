@@ -114,9 +114,24 @@ jobs:
     steps:
       - name: Health check
         run: |
-          STATUS_CODE=$(curl -L --write-out %{http_code} --silent --output /dev/null "http://group01.web.dops.tech/health")
-          if [ $STATUS_CODE -ne 200 ]; then
-            echo "Health check failed with status code $STATUS_CODE"
+          URL="http://group01.web.dops.tech/health"
+          echo "Checking URL: $URL"
+          MAX_RETRIES=5
+          RETRY_COUNT=0
+          STATUS_CODE=0
+
+          until [ "$STATUS_CODE" -eq 200 ] || [ "$RETRY_COUNT" -ge "$MAX_RETRIES" ]; do
+            STATUS_CODE=$(curl -L --write-out %{http_code} --silent --output /dev/null "$URL")
+            echo "Attempt $((RETRY_COUNT+1)): Status Code: $STATUS_CODE"
+            RETRY_COUNT=$((RETRY_COUNT + 1))
+            if [ "$STATUS_CODE" -ne 200 ]; then
+              echo "Health check failed with status code $STATUS_CODE, retrying..."
+              sleep 5  # Wait for 5 seconds before retrying
+            fi
+          done
+
+          if [ "$STATUS_CODE" -ne 200 ]; then
+            echo "Health check failed after $MAX_RETRIES attempts with status code $STATUS_CODE"
             exit 1
           else
             echo "Health check passed"
