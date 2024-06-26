@@ -52,7 +52,7 @@ jobs:
         run: echo "::set-output name=ref_name::$(echo ${GITHUB_REF#refs/heads/} | sed 's/[\/:]/-/g')"
 
       - name: Run dotnet format
-        run: docker run --entrypoint "" niloyan/dierentuin:${{ steps.sanitize.outputs.ref_name }} dotnet format -v d
+        run: docker run --entrypoint "" niloyan/dierentuin:${{ steps.sanitize.outputs.ref_name }} dotnet format ./Dierentuin.csproj -v d
 
   prepare-release:
     runs-on: [self-hosted, Linux, ARM64]
