@@ -112,6 +112,9 @@ jobs:
     runs-on: [self-hosted, Linux, ARM64]
     needs: monitoring
     steps:
+      - name: Wait for endpoints to be ready
+        run: sleep 30
+
       - name: Health check
         run: |
           URL="http://group01.web.dops.tech/health"
