@@ -43,7 +43,7 @@ jobs:
       - name: Run dotnet tests inside Docker container
         run: |
           docker build -t niloyan/dierentuin:${{ steps.sanitize.outputs.ref_name }} \
-            --target unittesting --build-arg "INCLUDE_UNITTESTING=true" \
+            --target unit-testing --build-arg "INCLUDE_UNITTESTING=true" \
             -f ./Dierentuin/Dockerfile .
           docker run --rm niloyan/dierentuin:${{ steps.sanitize.outputs.ref_name }} dotnet test
 
