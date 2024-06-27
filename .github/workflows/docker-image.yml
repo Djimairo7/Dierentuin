@@ -41,7 +41,7 @@ jobs:
         run: echo "::set-output name=ref_name::$(echo ${GITHUB_REF#refs/heads/} | sed 's/[\/:]/-/g')"
 
       - name: Run dotnet tests inside Docker container
-        working-directory: /src/TestProject1
+        working-directory: TestProject1
         run: docker run --entrypoint "" niloyan/dierentuin:${{ steps.sanitize.outputs.ref_name }} dotnet test --logger:trx
 
   code-quality:
