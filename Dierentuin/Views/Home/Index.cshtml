@@ -3,9 +3,36 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welkom in Artis</h1>
-    <a asp-controller="Enclosure" asp-action="Index">Enclosures</a>
-    <a asp-controller="Category" asp-action="Index">Categories</a>
-    <a asp-controller="Animal" asp-action="Index">Animals</a>
+    <h1 class="heading-primary">
+        Welcome to the Virtual Artis
+    </h1>
+</div>
 
+<div class="card-container">
+    <div class="card">
+        <img src="~/images/enclosure.jpg" alt="Enclosures-image">
+        <div class="card-description">
+            <h2>Enclosures</h2>
+            <p>..................</p>
+            <a asp-controller="Enclosure" asp-action="Index" class="btn btn-primary">View Enclosures</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="~/images/categories.jpg" alt="Categories-image">
+        <div class="card-description">
+            <h2>Categories</h2>
+            <p>................</p>
+            <a asp-controller="Category" asp-action="Index" class="btn btn-primary">View Categories</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="~/images/animals.jpg" alt="Animals-image">
+        <div class="card-description">
+            <h2>Animals</h2>
+            <p>................................</p>
+            <a asp-controller="Animal" asp-action="Index" class="btn btn-primary">View Animals</a>
+        </div>
+    </div>
 </div>
