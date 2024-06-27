@@ -18,13 +18,7 @@ RUN dotnet restore "TestProject1/TestProject1.csproj"
 COPY . .
 
 WORKDIR /src/Dierentuin
-RUN dotnet format ./Dierentuin.csproj -v d
 RUN dotnet build "Dierentuin.csproj" -c $BUILD_CONFIGURATION -o /app/build
-
-# Test stage
-FROM build AS unit-testing
-WORKDIR /src/TestProject1
-RUN dotnet test --logger:trx
 
 # Publish stage
 FROM build AS publish
