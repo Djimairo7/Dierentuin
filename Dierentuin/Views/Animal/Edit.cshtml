@@ -6,12 +6,15 @@
     var enclosures = ViewData["Enclosures"] as SelectList;
 }
 
-<h1>Edit</h1>
+<h1 class="enclosures-heading">Edit Animal</h1>
 
-<h4>Animal</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+
+<div class="d-flex justify-content-center">
+<div class="card col-10">
+    <div class="card-header">
+        <h5>Edit Animal Information</h5>
+        </div>
+    <div class="card-body">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
@@ -96,7 +99,7 @@
     </div>
 </div>
 
-<div>
+<div class="">
     <a asp-action="Index">Back to List</a>
 </div>
 
