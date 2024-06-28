@@ -1,4 +1,11 @@
-﻿.create-new-container {
+﻿.categories-heading{
+    color:white;
+    text-align:center;
+    margin-top:20px;
+}
+
+
+.create-new-container {
     text-align: right;
     padding: 0 20px;
 }
