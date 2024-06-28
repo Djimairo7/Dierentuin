@@ -1,62 +1,68 @@
 @model Dierentuin.Models.Enclosure
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Enclosure Details";
 }
 
-<h1>Details</h1>
+<h1 class="enclosures-details-heading">Details</h1>
 
-<div>
-    <h4>Enclosure</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Climate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Climate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Habitat)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Habitat)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Security)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Security)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Size)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Size)
-        </dd>
-        <dt class="col-sm-2">
-            Animals
-        </dt>
-        <dd class="col-sm-10">
-            <ul>
-                @foreach (var animal in Model.Animals)
-                {
-                    <li>
-                        <a asp-controller="Animal" asp-action="Details" asp-route-id="@animal.Id">@animal.Name
-                            (@animal.Species)</a>
-                    </li>
-                }
-            </ul>
-        </dd>
-    </dl>
+<div class="d-flex justify-content-center">
+    <div class="card shadow details-container">
+        <div class="card-header">
+            <h4 class="mb-0">Enclosure</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Climate)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Climate)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Habitat)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Habitat)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Security)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Security)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Size)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Size)
+                </dd>
+                <dt class="col-sm-4">
+                    Animals
+                </dt>
+                <dd class="col-sm-8">
+                    <ul class="list-unstyled">
+                        @foreach (var animal in Model.Animals)
+                        {
+                        <li>@animal.Name (@animal.Species)</li>
+                        }
+                    </ul>
+                </dd>
+            </dl>
+            <div class="text-center mt-3">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

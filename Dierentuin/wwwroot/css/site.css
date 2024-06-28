@@ -284,5 +284,26 @@ body {
     text-align: center;
     margin-bottom: 20px;
 }
+/* Einde create Enclosures code*/
+
+/*Code van Enclosures Details pagina*/
+
+.details-container {
+    max-width: 600px;
+    width: 100%;
+    margin: 10px;
+    padding: 20px;
+}
+
+.details-container .list-unstyled li {
+    margin-bottom: 5px;
+}
+
+.enclosures-details-heading {
+    color: white;
+    text-align: center;
+    margin-bottom: 20px;
+}
+/* Einde  Enclosures Details code*/
 /* Einde code*/
 @import "home.css";
