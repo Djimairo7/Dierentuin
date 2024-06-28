@@ -7,54 +7,26 @@
 <h1>Enclosures</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn-create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Climate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Habitat)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Security)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Size)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Climate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Habitat)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Security)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Size)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="enclosure-card-container">
+    @foreach (var item in Model)
+    {
+        <div class="enclosure-card">
+            <div class="enclosure-card-header">
+                @Html.DisplayFor(modelItem => item.Name)
+            </div>
+            <div class="enclosure-card-body">
+                <p><span>Climate:</span> @Html.DisplayFor(modelItem => item.Climate)</p>
+                <p><span>Habitat:</span> @Html.DisplayFor(modelItem => item.Habitat)</p>
+                <p><span>Security:</span> @Html.DisplayFor(modelItem => item.Security)</p>
+                <p><span>Size:</span> @Html.DisplayFor(modelItem => item.Size)</p>
+            </div>
+            <div class="enclosure-card-footer">
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </div>
+        </div>
+    }
+</div>

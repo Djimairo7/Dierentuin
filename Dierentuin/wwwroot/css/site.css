@@ -102,7 +102,72 @@ body {
     }
 }
 
+/*Dit de code van de enclosures pagina */
 
+.enclosures-container {
+    padding: 20px;
+    background-color: #eef2f3;
+    border-radius: 8px;
+}
+
+.heading-primary {
+    color: #333;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.btn {
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    color: white;
+    background-color: #007bff;
+    margin-right: 5px;
+}
+
+    .btn:hover {
+        background-color: #0056b3;
+    }
+
+.btn-create {
+    margin-bottom: 15px;
+    background-color: #28a745;
+}
+
+    .btn-create:hover {
+        background-color: #218838;
+    }
+
+.btn-edit {
+    background-color: #ffc107;
+}
+
+    .btn-edit:hover {
+        background-color: #e0a800;
+    }
+
+.btn-details {
+    background-color: #17a2b8;
+}
+
+    .btn-details:hover {
+        background-color: #138496;
+    }
+
+.btn-delete {
+    background-color: #dc3545;
+}
+
+    .btn-delete:hover {
+        background-color: #c82333;
+    }
+
+
+
+/* Code van de Enclosures */
+
+
+/*Einde code van de Enclosures*/
 
 
 @import "home.css";
