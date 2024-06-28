@@ -1,0 +1,58 @@
+﻿/* Styling voor de navigatiebalk */
+.navbar {
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand img.logo {
+    height: 40px;
+    width: auto;
+    transition: transform 0.3s;
+}
+
+    .navbar-brand img.logo:hover {
+        transform: scale(1.1);
+    }
+
+.navbar-toggler {
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.navbar-toggler-icon {
+    color: #000;
+}
+
+.nav-link {
+    color: #333;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+    .nav-link:hover {
+        color: #007bff;
+    }
+
+.navbar-collapse {
+    flex-grow: 1;
+    justify-content: space-between;
+}
+
+/* Responsieve styling */
+@media (max-width: 576px) {
+    .navbar-brand img.logo {
+        height: 60px;
+    }
+
+    .nav-link {
+        text-align: center;
+        padding: 10px 0;
+    }
+}
+
+@media (min-width: 576px) {
+    .nav-item {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+}

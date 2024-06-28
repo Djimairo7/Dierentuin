@@ -1,0 +1,125 @@
+﻿.categories-heading{
+    color:white;
+    text-align:center;
+    margin-top:20px;
+}
+
+
+.create-new-container {
+    text-align: right;
+    padding: 0 20px;
+}
+
+.create-new-button {
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #8B4513;
+    border-radius: 4px;
+}
+
+.create-new-button:hover {
+    background-color: #693f3c;
+    color:white;
+}
+
+.categories-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 20px;
+}
+
+.categories-card {
+    background-color: #D2B48C;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    margin: 15px;
+    padding: 20px;
+    color: #333;
+    text-align: center;
+}
+
+    .categories-card h2 {
+        margin-top: 0;
+    }
+
+.action-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.action-button {
+    flex: 1;
+    margin: 0 5px;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #8B4513;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.action-button:hover {
+    background-color: #693f3c;
+    color:white;
+}
+
+.categories-details-card {
+    background-color: #D2B48C;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    color: #333;
+    margin: 20px auto;
+    max-width: 800px;
+}
+
+.categories-details-card h4 {
+    margin-top: 0;
+}
+
+.details-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.details-action-button {
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #8B4513;
+    border-radius: 4px;
+    margin-left: 10px;
+}
+
+.details-action-button:hover {
+    background-color: #693f3c;
+    color:white;
+}
+
+.animal-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+    .animal-list li {
+        margin: 5px 0;
+    }
+
+.animal-link {
+    text-decoration: none;
+    color: #fff;
+    background-color: #8B4513;
+    padding: 5px 10px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.animal-link:hover {
+    background-color: #693f3c;
+    color:white;
+}
