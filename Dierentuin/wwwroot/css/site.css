@@ -278,5 +278,11 @@ body {
     text-align: center;
     margin-bottom: 20px;
 }
+
+.edit-enclosure-heading {
+    color: white;
+    text-align: center;
+    margin-bottom: 20px;
+}
 /* Einde code*/
 @import "home.css";
