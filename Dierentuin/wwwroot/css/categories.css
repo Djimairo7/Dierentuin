@@ -1,0 +1,65 @@
+﻿.categories-heading {
+    color:white;
+    text-align: center;
+    margin-top:50px;
+}
+
+.create-new-container {
+    text-align: right;
+    padding: 0 20px;
+}
+
+.create-new-button {
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #8B4513;
+    border-radius: 4px;
+}
+
+    .create-new-button:hover {
+        background-color: #693f3c;
+    }
+
+.categories-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 20px;
+}
+
+.categories-card {
+    background-color: #D2B48C;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    margin: 15px;
+    padding: 20px;
+    color: #333;
+    text-align: center;
+}
+
+    .categories-card h2 {
+        margin-top: 0;
+    }
+
+.action-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.action-button {
+    flex: 1;
+    margin: 0 5px;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #8B4513;
+    border-radius: 4px;
+    text-align: center;
+}
+
+    .action-button:hover {
+        background-color: #693f3c;
+    }
