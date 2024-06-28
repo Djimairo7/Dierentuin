@@ -24,7 +24,11 @@ body {
 .logo {
     height: 80px;
 }
-
+@media (max-width: 600px) {
+    .logo {
+        height: 60px;
+    }
+}
 .home-container {
     min-height: 80vh;
     display: flex;
