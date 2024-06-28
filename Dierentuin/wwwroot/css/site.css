@@ -27,20 +27,26 @@ body {
 
 .home-container {
     height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
-.heading-primary {
-    color: white;
+.home-heading-primary {
+    color: #eef2f3;
     font-size: 2.5rem;
-    margin-top: 2rem;
+    margin-top: 3rem;
 }
 
 .card-container {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: center;
     gap: 20px;
     padding: 20px;
+    width: 100%;
+    max-width: 1200px;
 }
 
 .card {
@@ -49,14 +55,15 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     text-align: center;
-    width: 30%;
-    flex: 1 1 calc(33.333% - 20px);
-    margin: 10px 0;
+    flex: 1;
+    margin: 10px;
+    max-width: 300px;
 }
 
     .card img {
         width: 100%;
-        height: auto;
+        height: 200px;
+        object-fit: cover;
     }
 
 .card-description {
@@ -65,10 +72,11 @@ body {
 
     .card-description h2 {
         margin: 0 0 10px;
+        font-size: 1.5rem;
     }
 
     .card-description p {
-        color: #666;
+        color: black;
         font-size: 14px;
         margin: 10px 0;
     }
@@ -82,6 +90,7 @@ body {
     text-decoration: none;
     border-radius: 4px;
     border: none;
+    font-size: 1rem;
 }
 
     .btn:hover {
@@ -89,16 +98,21 @@ body {
     }
 
 @media (max-width: 768px) {
+    .card-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
     .card {
-        width: 45%;
-        flex: 1 1 calc(50% - 20px);
+        width: 80%;
+        max-width: 400px;
     }
 }
 
 @media (max-width: 480px) {
     .card {
         width: 100%;
-        flex: 1 1 100%;
+        max-width: none;
     }
 }
 
@@ -110,23 +124,20 @@ body {
     border-radius: 8px;
 }
 
-.heading-primary {
-    color: #333;
-    font-size: 2rem;
-    margin-bottom: 1rem;
-}
+
 
 .btn {
     text-decoration: none;
     padding: 8px 12px;
     border-radius: 4px;
     color: white;
-    background-color: #007bff;
+    background-color: #8B4513;
     margin-right: 5px;
 }
 
     .btn:hover {
-        background-color: #0056b3;
+        background-color: #8FBC8F;
+        color:black;
     }
 
 .btn-create {
@@ -166,8 +177,99 @@ body {
 
 /* Code van de Enclosures */
 
+.enclosures-heading {
+    color: white;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+
+
+.btn-create {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #8B4513;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    position: relative;
+    float: right;
+    margin-bottom: 20px;
+}
+
+    .btn-create:hover {
+         background-color: #8FBC8F;
+        color:black;
+    }
+
+.enclosure-card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+    align-content: flex-start; 
+}
+
+.enclosure-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    width: 300px;
+    margin: 20px;
+    transition: transform 0.3s;
+}
+
+    .enclosure-card:hover {
+        transform: translateY(-5px);
+    }
+
+.enclosure-card-header {
+    background-color: #D2B48C;
+    color: black;
+    padding: 15px;
+    font-size: 1.25em;
+    text-align: center;
+}
+
+.enclosure-card-body {
+    padding: 15px;
+}
+
+    .enclosure-card-body p {
+        margin: 10px 0;
+    }
+
+        .enclosure-card-body p span {
+            font-weight: bold;
+        }
+
+.enclosure-card-footer {
+    background-color: #D2B48C;
+    padding: 10px;
+    text-align: center;
+}
+
+    .enclosure-card-footer a {
+        color: black;
+        text-decoration: none;
+        margin: 0 5px;
+        font-weight: bold;
+    }
+
+        .enclosure-card-footer a:hover {
+            text-decoration: underline;
+            color: #000;
+        }
 
 /*Einde code van de Enclosures*/
 
+/*Create code van de Enclosures */
 
+
+
+
+/* Einde code*/
 @import "home.css";
