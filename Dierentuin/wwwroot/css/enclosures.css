@@ -189,3 +189,97 @@
 }
 /* Einde  Enclosures Details code*/
 /* Einde code*/
+
+/*Code Enclosures Details delete card*/
+.enclosure-delete-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.enclosure-delete-card {
+    width: 60%;
+    background-color: #D2B48C;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+    margin: 10px;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-header {
+    background-color: #ff5252;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ff5252;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.dl.row dt,
+.dl.row dd {
+    margin-bottom: 10px;
+}
+
+.btn-danger {
+    background-color: #b71c1c;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+    .btn-danger:hover {
+        background-color: #d32f2f;
+    }
+
+.btn-secondary {
+    background-color: #8B4513;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+    .btn-secondary:hover {
+        background-color: #8d4300;
+    }
+
+.text-danger {
+    color: #ff5252;
+}
+
+@media (max-width: 768px) {
+    .enclosure-delete-card {
+        width: 80%;
+    }
+}
+
+@media (max-width: 480px) {
+    .enclosure-delete-card {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .btn-danger,
+    .btn-secondary {
+        width: 100%;
+        padding: 15px;
+    }
+}
+}
+
+
+
+
+/*Einde Code */
