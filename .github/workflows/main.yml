@@ -76,6 +76,9 @@ jobs:
       - name: Apply deploy.yml
         run: kubectl apply -f k8s/deploy.yml
 
+      - name: Update deployment image
+        run: kubectl set image deployment/group01 group01=niloyan/dierentuin:${{ github.sha }} -n group01
+
       - name: Kube Rollout (restart)
         run: kubectl rollout restart deployment/group01
 
