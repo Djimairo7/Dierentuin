@@ -6,102 +6,107 @@
     var enclosures = ViewData["Enclosures"] as SelectList;
 }
 
-<h1>Edit</h1>
+<h1 class="enclosures-heading">Edit Animal</h1>
 
-<h4>Animal</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Species" class="control-label"></label>
-                <input asp-for="Species" class="form-control" />
-                <span asp-validation-for="Species" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Category" class="control-label"></label>
-                <select asp-for="CategoryId" class="form-control" asp-items="@(categories)">
-                    <option value="">None</option>
-                </select>
-                <span asp-validation-for="CategoryId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Size" class="control-label"></label>
-                <select asp-for="Size" class="form-control">
-                    @foreach (var size in Enum.GetValues(typeof(Dierentuin.Models.Animal.AnimalSize)))
-                    {
-                        <option value="@size">@size</option>
-                    }
-                </select>
-                <span asp-validation-for="Size" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Diet" class="control-label"></label>
-                <select asp-for="Diet" class="form-control">
-                    @foreach (var diet in Enum.GetValues(typeof(Dierentuin.Models.Animal.DietaryClass)))
-                    {
-                        <option value="@diet">@diet</option>
-                    }
-                </select>
-                <span asp-validation-for="Diet" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Activity" class="control-label"></label>
-                <select asp-for="Activity" class="form-control">
-                    @foreach (var activity in Enum.GetValues(typeof(Dierentuin.Models.Animal.ActivityPattern)))
-                    {
-                        <option value="@activity">@activity</option>
-                    }
-                </select>
-                <span asp-validation-for="Activity" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Prey" class="control-label"></label>
-                <input asp-for="Prey" class="form-control" />
-                <span asp-validation-for="Prey" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Enclosure" class="control-label"></label>
-                <select asp-for="EnclosureId" class="form-control" asp-items="@(enclosures)">
-                    <option value="">None</option>
-                </select>
-                <span asp-validation-for="EnclosureId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Space" class="control-label"></label>
-                <input asp-for="Space" class="form-control" />
-                <span asp-validation-for="Space" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Security" class="control-label"></label>
-                <select asp-for="Security" class="form-control">
-                    @foreach (var security in Enum.GetValues(typeof(Dierentuin.Models.Animal.SecurityLevel)))
-                    {
-                        <option value="@security">@security</option>
-                    }
-                </select>
-                <span asp-validation-for="Security" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+
+<div class="d-flex justify-content-center">
+    <div class="card shadow form-container">
+        <div class="card-header">
+            <h4 class="mb-0">Animal Details</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <div class="form-group mb-3">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Species" class="control-label"></label>
+                    <input asp-for="Species" class="form-control" />
+                    <span asp-validation-for="Species" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Category" class="control-label"></label>
+                    <select asp-for="CategoryId" class="form-select " asp-items="@(categories)">
+                        <option value="">None</option>
+                    </select>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Size" class="control-label"></label>
+                    <select asp-for="Size" class="form-select">
+                        @foreach (var size in Enum.GetValues(typeof(Dierentuin.Models.Animal.AnimalSize)))
+                        {
+                            <option value="@size">@size</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Size" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Diet" class="control-label"></label>
+                    <select asp-for="Diet" class="form-select">
+                        @foreach (var diet in Enum.GetValues(typeof(Dierentuin.Models.Animal.DietaryClass)))
+                        {
+                            <option value="@diet">@diet</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Diet" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Activity" class="control-label"></label>
+                    <select asp-for="Activity" class="form-select">
+                        @foreach (var activity in Enum.GetValues(typeof(Dierentuin.Models.Animal.ActivityPattern)))
+                        {
+                            <option value="@activity">@activity</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Activity" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Prey" class="control-label"></label>
+                    <input asp-for="Prey" class="form-control" />
+                    <span asp-validation-for="Prey" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Enclosure" class="control-label"></label>
+                    <select asp-for="EnclosureId" class="form-select" asp-items="@(enclosures)">
+                        <option value="">None</option>
+                    </select>
+                    <span asp-validation-for="EnclosureId" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Space" class="control-label"></label>
+                    <input asp-for="Space" class="form-control" />
+                    <span asp-validation-for="Space" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Security" class="control-label"></label>
+                    <select asp-for="Security" class="form-select">
+                        @foreach (var security in Enum.GetValues(typeof(Dierentuin.Models.Animal.SecurityLevel)))
+                        {
+                            <option value="@security">@security</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Security" class="text-danger"></span>
+                </div>
+                <div class="d-grid">
+                    <input type="submit" value="Save" class="btn btn-secondary" />
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        <div class="text-center mt-3">
+            <a asp-action="Index" class="btn btn-primary">Back to List</a>
+        </div>
+
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
     }
-}
