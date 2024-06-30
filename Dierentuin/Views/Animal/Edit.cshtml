@@ -12,7 +12,7 @@
 <div class="d-flex justify-content-center">
     <div class="card shadow form-container">
         <div class="card-header">
-            <h5 class="mb-0">Edit Animal Information</h5>
+            <h4 class="mb-0">Animal Details</h4>
         </div>
         <div class="card-body">
             <form asp-action="Edit">
@@ -92,7 +92,7 @@
                     </select>
                     <span asp-validation-for="Security" class="text-danger"></span>
                 </div>
-                <div class="text-center mt-3">
+                <div class="d-grid">
                     <input type="submit" value="Save" class="btn btn-secondary" />
                 </div>
             </form>
@@ -101,11 +101,9 @@
 </div>
 
 
-    <div class="row">
-        <div class="col text-center">
+        <div class="text-center mt-3">
             <a asp-action="Index" class="btn btn-primary">Back to List</a>
         </div>
-    </div>
 
     @section Scripts {
         @{
