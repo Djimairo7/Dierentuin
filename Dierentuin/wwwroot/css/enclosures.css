@@ -1,0 +1,285 @@
+﻿
+/*Dit de code van de enclosures pagina */
+
+.enclosures-container {
+    padding: 20px;
+    background-color: #eef2f3;
+    border-radius: 8px;
+}
+
+
+
+.btn {
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    color: white;
+    background-color: #8B4513;
+    margin-right: 5px;
+}
+
+    .btn:hover {
+        background-color: #8FBC8F;
+        color: black;
+    }
+
+.btn-create {
+    margin-bottom: 15px;
+    background-color: #28a745;
+}
+
+    .btn-create:hover {
+        background-color: #218838;
+    }
+
+.btn-edit {
+    background-color: #ffc107;
+}
+
+    .btn-edit:hover {
+        background-color: #e0a800;
+    }
+
+.btn-details {
+    background-color: #17a2b8;
+}
+
+    .btn-details:hover {
+        background-color: #138496;
+    }
+
+.btn-delete {
+    background-color: #dc3545;
+}
+
+    .btn-delete:hover {
+        background-color: #c82333;
+    }
+
+
+
+/* Code van de Enclosures */
+
+.enclosures-heading {
+    color: white;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+
+
+.btn-create {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #8B4513;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    position: relative;
+    float: right;
+    margin-bottom: 20px;
+}
+
+    .btn-create:hover {
+        background-color: #8FBC8F;
+        color: black;
+    }
+
+.enclosure-card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+    align-content: flex-start;
+}
+
+.enclosure-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    width: 300px;
+    margin: 20px;
+    transition: transform 0.3s;
+}
+
+    .enclosure-card:hover {
+        transform: translateY(-5px);
+    }
+
+.enclosure-card-header {
+    background-color: #D2B48C;
+    color: black;
+    padding: 15px;
+    font-size: 1.25em;
+    text-align: center;
+}
+
+.enclosure-card-body {
+    padding: 15px;
+}
+
+    .enclosure-card-body p {
+        margin: 10px 0;
+    }
+
+        .enclosure-card-body p span {
+            font-weight: bold;
+        }
+
+.enclosure-card-footer {
+    background-color: #D2B48C;
+    padding: 10px;
+    text-align: center;
+}
+
+    .enclosure-card-footer a {
+        color: black;
+        text-decoration: none;
+        margin: 0 5px;
+        font-weight: bold;
+    }
+
+        .enclosure-card-footer a:hover {
+            text-decoration: underline;
+            color: #000;
+        }
+
+/*Einde code van de Enclosures*/
+
+/*Create code van de Enclosures */
+.form-container {
+    max-width: 450px;
+    width: 90%;
+    margin: 20px;
+}
+
+.create-enclosure {
+    color: white;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.edit-enclosure-heading {
+    color: white;
+    text-align: center;
+    margin-bottom: 20px;
+}
+/* Einde create Enclosures code*/
+
+/*Code van Enclosures Details pagina*/
+
+.details-container {
+    max-width: 600px;
+    width: 100%;
+    margin: 10px;
+    padding: 20px;
+}
+
+    .details-container .list-unstyled li {
+        margin-bottom: 5px;
+    }
+
+.enclosures-details-heading {
+    color: white;
+    text-align: center;
+    margin-bottom: 20px;
+}
+/* Einde  Enclosures Details code*/
+/* Einde code*/
+
+/*Code Enclosures Details delete card*/
+.enclosure-delete-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.enclosure-delete-card {
+    width: 60%;
+    background-color: #D2B48C;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+    margin: 10px;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-header {
+    background-color: #ff5252;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ff5252;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.dl.row dt,
+.dl.row dd {
+    margin-bottom: 10px;
+}
+
+.btn-danger {
+    background-color: #b71c1c;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+    .btn-danger:hover {
+        background-color: #d32f2f;
+    }
+
+.btn-secondary {
+    background-color: #8B4513;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+    .btn-secondary:hover {
+        background-color: #8d4300;
+    }
+
+.text-danger {
+    color: #ff5252;
+}
+
+@media (max-width: 768px) {
+    .enclosure-delete-card {
+        width: 80%;
+    }
+}
+
+@media (max-width: 480px) {
+    .enclosure-delete-card {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .btn-danger,
+    .btn-secondary {
+        width: 100%;
+        padding: 15px;
+    }
+}
+}
+
+
+
+
+/*Einde Code */
