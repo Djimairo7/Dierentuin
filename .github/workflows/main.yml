@@ -32,21 +32,48 @@ jobs:
     runs-on: [self-hosted, Linux, ARM64]
     needs: build
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Docker image for testing
+        run: docker build -t niloyan/dierentuin:${{ github.sha }} --target build -f ./Dierentuin/Dockerfile .
+
+      - name: Create test-results directory
+        run: mkdir -p test-results
+
       - name: Run dotnet tests inside Docker container
-        working-directory: TestProject1
-        run: docker run --entrypoint "" niloyan/dierentuin:${{ github.sha }} dotnet test --logger:trx
+        run: |
+          docker run --rm \
+            -v $PWD/test-results:/app/test-results \
+            niloyan/dierentuin:${{ github.sha }} \
+            dotnet test --logger:trx;LogFileName=/app/test-results/test_results.trx
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: test-results
 
   code-quality:
     runs-on: [self-hosted, Linux, ARM64]
     needs: unit-testing
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Docker image for code quality
+        run: docker build -t niloyan/dierentuin:${{ github.sha }} --target build -f ./Dierentuin/Dockerfile .
+
       - name: Run dotnet format
-        run: docker run --entrypoint "" niloyan/dierentuin:${{ github.sha }} dotnet format ./Dierentuin.csproj -v d
+        run: docker run --rm niloyan/dierentuin:${{ github.sha }} dotnet format ./Dierentuin.csproj -v d
 
   prepare-release:
     runs-on: [self-hosted, Linux, ARM64]
     needs: code-quality
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Docker build as final
         run: |
           docker build \
