@@ -66,6 +66,46 @@ namespace Dierentuin.API
             return Ok(animal);
         }
 
+        [HttpGet("{id}/sleepstate")]
+        public ActionResult<string> GetAnimalSleepState(int id)
+        {
+            var animal = _context.Animals.Find(id);
+            if (animal == null)
+            {
+                return NotFound();
+            }
+
+            string sleepState = GetSleepState(animal.Activity);
+            return Ok(sleepState);
+        }
+
+        private static string GetSleepState(Animal.ActivityPattern activityPattern)
+        {
+            var currentHour = DateTime.Now.Hour;
+
+            return activityPattern switch
+            {
+                Animal.ActivityPattern.Diurnal when currentHour >= 6 && currentHour < 18 => "Awake",
+                Animal.ActivityPattern.Diurnal => "Sleeping",
+                Animal.ActivityPattern.Nocturnal when currentHour >= 18 || currentHour < 6 => "Awake",
+                Animal.ActivityPattern.Nocturnal => "Sleeping",
+                Animal.ActivityPattern.Cathemeral => "Always Awake",
+                _ => throw new ArgumentException("Invalid activity pattern")
+            };
+        }
+
+        [HttpGet("{id}/feedingtime")]
+        public ActionResult<string> GetAnimalFeedingTime(int id)
+        {
+            var animal = _context.Animals.Find(id);
+            if (animal == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(animal.Prey);
+        }
+
         [HttpPost]
         public async Task<ActionResult<AnimalDto>> PostAnimal(AnimalDto animalDto)
         {

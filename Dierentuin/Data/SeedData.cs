@@ -65,7 +65,7 @@ namespace Dierentuin.Models
                         .RuleFor(a => a.Security, f => f.PickRandom<Animal.SecurityLevel>())
                         .RuleFor(a => a.Category, f => f.PickRandom(categories));
 
-                    var fakeAnimals = animalFaker.Generate(30); // Generate 10 fake animals
+                    var fakeAnimals = animalFaker.Generate(30); // Generate 30 fake animals
 
                     context.Animals.AddRange(fakeAnimals);
                     context.SaveChanges();

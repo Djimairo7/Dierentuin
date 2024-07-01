@@ -185,6 +185,66 @@ namespace Dierentuin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> SleepState(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var animal = await _context.Animals
+                .Include(a => a.Category)
+                .Include(a => a.Enclosure)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (animal == null)
+            {
+                return NotFound();
+            }
+
+            var sleepState = GetSleepState(animal.Activity);
+            ViewData["SleepState"] = sleepState;
+
+            return View(animal);
+        }
+
+        private static string GetSleepState(Animal.ActivityPattern activityPattern)
+        {
+            var currentHour = DateTime.Now.Hour;
+
+            return activityPattern switch
+            {
+                Animal.ActivityPattern.Diurnal when currentHour >= 6 && currentHour < 18 => "Awake",
+                Animal.ActivityPattern.Diurnal => "Sleeping",
+                Animal.ActivityPattern.Nocturnal when currentHour >= 18 || currentHour < 6 => "Awake",
+                Animal.ActivityPattern.Nocturnal => "Sleeping",
+                Animal.ActivityPattern.Cathemeral => "Always Awake",
+                _ => throw new ArgumentException("Invalid activity pattern")
+            };
+        }
+
+        public async Task<IActionResult> FeedingTime(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var animal = await _context.Animals
+                .Include(a => a.Category)
+                .Include(a => a.Enclosure)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (animal == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["FeedingTime"] = animal.Prey;
+
+            return View(animal);
+        }
+
         private bool AnimalExists(int id)
         {
             return _context.Animals.Any(e => e.Id == id);
