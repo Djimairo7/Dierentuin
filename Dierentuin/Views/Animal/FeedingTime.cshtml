@@ -1,0 +1,46 @@
+@model Dierentuin.Models.Animal
+@{
+    ViewData["Title"] = "Animal Sleep State";
+    var feedingTime = (string)ViewData["FeedingTime"];
+}
+
+<h1>Sleep State for @Model.Name</h1>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Name (@Model.Species)</h5>
+        <h4 class="mt-4">Feed:</h4>
+        <div class="sleep-state-visual @feedingTime.ToLower()">
+            @feedingTime
+        </div>
+    </div>
+</div>
+
+<div class="mt-3">
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
+
+<style>
+    .sleep-state-visual {
+        padding: 20px;
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+        border-radius: 10px;
+    }
+
+    .awake {
+        background-color: #90EE90;
+        color: #006400;
+    }
+
+    .sleeping {
+        background-color: #87CEFA;
+        color: #00008B;
+    }
+
+    .always.awake {
+        background-color: #FFD700;
+        color: #8B4513;
+    }
+</style>

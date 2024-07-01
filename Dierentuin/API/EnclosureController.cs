@@ -86,6 +86,67 @@ namespace Dierentuin.API
             return Ok(enclosure);
         }
 
+        [HttpGet("{id}/sleepstate")]
+        public ActionResult<IEnumerable<SleepStateDto>> GetEnclosureSleepStates(int id)
+        {
+            var enclosure = _context.Enclosures
+                .Include(e => e.Animals)
+                .FirstOrDefault(e => e.Id == id);
+
+            if (enclosure == null)
+            {
+                return NotFound();
+            }
+
+            var animalSleepStates = enclosure.Animals.Select(a => new SleepStateDto
+            {
+                Id = a.Id,
+                Name = a.Name,
+                Species = a.Species,
+                SleepState = GetSleepState(a.Activity)
+            }).ToList();
+
+            return Ok(animalSleepStates);
+        }
+
+        private static string GetSleepState(Animal.ActivityPattern activityPattern)
+        {
+            var currentHour = DateTime.Now.Hour;
+
+            return activityPattern switch
+            {
+                Animal.ActivityPattern.Diurnal when currentHour >= 6 && currentHour < 18 => "Awake",
+                Animal.ActivityPattern.Diurnal => "Sleeping",
+                Animal.ActivityPattern.Nocturnal when currentHour >= 18 || currentHour < 6 => "Awake",
+                Animal.ActivityPattern.Nocturnal => "Sleeping",
+                Animal.ActivityPattern.Cathemeral => "Always Awake",
+                _ => throw new ArgumentException("Invalid activity pattern")
+            };
+        }
+
+        [HttpGet("{id}/feedingtime")]
+        public ActionResult<IEnumerable<FeedingTimeDto>> GetEnclosureFeedingTimes(int id)
+        {
+            var enclosure = _context.Enclosures
+                .Include(e => e.Animals)
+                .FirstOrDefault(e => e.Id == id);
+
+            if (enclosure == null)
+            {
+                return NotFound();
+            }
+
+            var animalFeedingTimes = enclosure.Animals.Select(a => new FeedingTimeDto
+            {
+                Id = a.Id,
+                Name = a.Name,
+                Species = a.Species,
+                FeedingTime = a.Prey
+            }).ToList();
+
+            return Ok(animalFeedingTimes);
+        }
+
         [HttpPost]
         public async Task<ActionResult<AnimalDto>> PostEnclosure(EnclosureDto enclosureDto)
         {
