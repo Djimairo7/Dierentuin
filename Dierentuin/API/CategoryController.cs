@@ -6,9 +6,9 @@ using Dierentuin.DTO;
 
 namespace Dierentuin.API
 {
-    [Route("api/categories")]
+    [Route("api/categories")] // Define the route where the api will accesible
     [ApiController]
-    public class CategoryApiController : ControllerBase
+    public class CategoryApiController : ControllerBase // Inherit from ControllerBase instead of Controller, leaving out the view functionality used in the Controller class
     {
         private readonly DierentuinContext _context;
 
@@ -17,12 +17,12 @@ namespace Dierentuin.API
             _context = context;
         }
 
-        [HttpGet]
+        [HttpGet] // Simply returns all Categories
         public ActionResult<IEnumerable<CategoryDto>> GetCategories()
         {
             var categories = _context.Categories
                 .Include(e => e.Animals)
-                .Select(e => new CategoryDto
+                .Select(e => new CategoryDto // DTO (Data Transfer Object) is used to define what properties will be accesible in the API
                 {
                     Id = e.Id,
                     Name = e.Name,
@@ -43,7 +43,7 @@ namespace Dierentuin.API
             return Ok(categories);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}")] // Returns a single category based on it's id
         public ActionResult<CategoryDto> GetCategory(int id)
         {
             var category = _context.Categories
@@ -74,7 +74,7 @@ namespace Dierentuin.API
             return Ok(category);
         }
 
-        [HttpPost]
+        [HttpPost] // Allows adding a category using the API by sending a post request to the categories endpoint with the properties as a request body
         public async Task<ActionResult<CategoryDto>> PostCategory(CategoryDto categoryDto)
         {
             var category = new Category
@@ -88,7 +88,7 @@ namespace Dierentuin.API
             return CreatedAtAction(nameof(GetCategory), new { id = category.Id }, categoryDto);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}")] // Allows editing a categories properties by sending a put request to the categories endpoint with the properties as a request body
         public async Task<IActionResult> PutCategory(int id, CategoryDto categoryDto)
         {
             if (id != categoryDto.Id)
@@ -125,7 +125,7 @@ namespace Dierentuin.API
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}")]  // Allows deleting a category by sending a delete request to the categories endpoint
         public async Task<IActionResult> DeleteCategory(int id)
         {
             var category = await _context.Categories.FindAsync(id);

@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Dierentuin.Data;
 using Dierentuin.Models;
@@ -14,19 +9,20 @@ namespace Dierentuin.Controllers
     {
         private readonly DierentuinContext _context;
 
+        // Constructor: Dependency injection of DierentuinContext
         public CategoryController(DierentuinContext context)
         {
             _context = context;
         }
 
-        // GET: Category
+        // GET: Category - Displays a list of all categories
         public async Task<IActionResult> Index()
         {
             var categories = await _context.Categories.ToListAsync();
             return View(categories);
         }
 
-        // GET: Category/Details/5
+        // GET: Category/Details/{id} - Displays details of a specific category
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -35,7 +31,7 @@ namespace Dierentuin.Controllers
             }
 
             var category = await _context.Categories
-                .Include(e => e.Animals) // Include the list of animals
+                .Include(e => e.Animals) // Include the list of animals in this category
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (category == null)
             {
@@ -45,15 +41,13 @@ namespace Dierentuin.Controllers
             return View(category);
         }
 
-        // GET: Category/Create
+        // GET: Category/Create - Displays form to create a new category
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Category/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Category/Create - Handles the creation of a new category
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name")] Category category)
@@ -67,7 +61,7 @@ namespace Dierentuin.Controllers
             return View(category);
         }
 
-        // GET: Category/Edit/5
+        // GET: Category/Edit/{id} - Displays form to edit an existing category
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -83,9 +77,7 @@ namespace Dierentuin.Controllers
             return View(category);
         }
 
-        // POST: Category/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Category/Edit/{id} - Handles the update of an existing category
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Category category)
@@ -118,7 +110,7 @@ namespace Dierentuin.Controllers
             return View(category);
         }
 
-        // GET: Category/Delete/5
+        // GET: Category/Delete/{id} - Displays confirmation page for deleting a category
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -136,7 +128,7 @@ namespace Dierentuin.Controllers
             return View(category);
         }
 
-        // POST: Category/Delete/5
+        // POST: Category/Delete/{id} - Handles the deletion of a category
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -151,6 +143,7 @@ namespace Dierentuin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // Helper method to check if a category exists in the database
         private bool CategoryExists(int id)
         {
             return _context.Categories.Any(e => e.Id == id);

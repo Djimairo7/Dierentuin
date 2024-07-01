@@ -6,9 +6,9 @@ using Dierentuin.DTO;
 
 namespace Dierentuin.API
 {
-    [Route("api/animals")]
+    [Route("api/animals")] // Define the route where the api will accesible
     [ApiController]
-    public class AnimalApiController : ControllerBase
+    public class AnimalApiController : ControllerBase // Inherit from ControllerBase instead of Controller, leaving out the view functionality used in the Controller class
     {
         private readonly DierentuinContext _context;
 
@@ -17,11 +17,11 @@ namespace Dierentuin.API
             _context = context;
         }
 
-        [HttpGet]
+        [HttpGet] // Simply returns all Animals
         public ActionResult<IEnumerable<AnimalDto>> GetAnimals()
         {
             var animals = _context.Animals
-                .Select(a => new AnimalDto
+                .Select(a => new AnimalDto // DTO (Data Transfer Object) is used to define what properties will be accesible in the API
                 {
                     Id = a.Id,
                     Name = a.Name,
@@ -39,7 +39,7 @@ namespace Dierentuin.API
             return Ok(animals);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}")] // Returns a single animal based on it's id
         public ActionResult<AnimalDto> GetAnimal(int id)
         {
             var animal = _context.Animals
@@ -66,7 +66,7 @@ namespace Dierentuin.API
             return Ok(animal);
         }
 
-        [HttpGet("{id}/sleepstate")]
+        [HttpGet("{id}/sleepstate")] // returns the sleeping state of a given animal by it's id
         public ActionResult<string> GetAnimalSleepState(int id)
         {
             var animal = _context.Animals.Find(id);
@@ -83,7 +83,7 @@ namespace Dierentuin.API
         {
             var currentHour = DateTime.Now.Hour;
 
-            return activityPattern switch
+            return activityPattern switch // set the sleepingstate based on the activity pattern of the animals and the current hour of the day
             {
                 Animal.ActivityPattern.Diurnal when currentHour >= 6 && currentHour < 18 => "Awake",
                 Animal.ActivityPattern.Diurnal => "Sleeping",
@@ -94,7 +94,7 @@ namespace Dierentuin.API
             };
         }
 
-        [HttpGet("{id}/feedingtime")]
+        [HttpGet("{id}/feedingtime")] // return the feed of a given animal by it's id
         public ActionResult<string> GetAnimalFeedingTime(int id)
         {
             var animal = _context.Animals.Find(id);
@@ -106,7 +106,7 @@ namespace Dierentuin.API
             return Ok(animal.Prey);
         }
 
-        [HttpPost]
+        [HttpPost] // Allows adding an animal using the API by sending a post request to the animals endpoint with the properties as a request body
         public async Task<ActionResult<AnimalDto>> PostAnimal(AnimalDto animalDto)
         {
             var animal = new Animal
@@ -129,7 +129,7 @@ namespace Dierentuin.API
             return CreatedAtAction(nameof(GetAnimal), new { id = animal.Id }, animalDto);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}")] // Allows editing an animals properties by sending a put request to the animals endpoint with the properties as a request body
         public async Task<IActionResult> PutAnimal(int id, AnimalDto animalDto)
         {
             if (id != animalDto.Id)
@@ -175,7 +175,7 @@ namespace Dierentuin.API
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}")] // Allows deleting an animal by sending a delete request to the animal endpoint
         public async Task<IActionResult> DeleteAnimal(int id)
         {
             var animal = await _context.Animals.FindAsync(id);

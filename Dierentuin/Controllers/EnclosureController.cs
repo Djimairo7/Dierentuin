@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Dierentuin.Data;
 using Dierentuin.Models;
@@ -14,18 +9,19 @@ namespace Dierentuin.Controllers
     {
         private readonly DierentuinContext _context;
 
+        // Constructor: Dependency injection of DierentuinContext
         public EnclosureController(DierentuinContext context)
         {
             _context = context;
         }
 
-        // GET: Enclosure
+        // GET: Enclosure - Displays a list of all enclosures
         public async Task<IActionResult> Index()
         {
             return View(await _context.Enclosures.ToListAsync());
         }
 
-        // GET: Enclosure/Details/5
+        // GET: Enclosure/Details/{id} - Displays details of a specific enclosure
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,7 +30,7 @@ namespace Dierentuin.Controllers
             }
 
             var enclosure = await _context.Enclosures
-                .Include(e => e.Animals) // Include the list of animals
+                .Include(e => e.Animals) // Include the list of animals in this enclosure
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (enclosure == null)
             {
@@ -44,15 +40,13 @@ namespace Dierentuin.Controllers
             return View(enclosure);
         }
 
-        // GET: Enclosure/Create
+        // GET: Enclosure/Create - Displays form to create a new enclosure
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Enclosure/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Enclosure/Create - Handles the creation of a new enclosure
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Climate,Habitat,Security,Size")] Enclosure enclosure)
@@ -66,7 +60,7 @@ namespace Dierentuin.Controllers
             return View(enclosure);
         }
 
-        // GET: Enclosure/Edit/5
+        // GET: Enclosure/Edit/{id} - Displays form to edit an existing enclosure
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -82,9 +76,7 @@ namespace Dierentuin.Controllers
             return View(enclosure);
         }
 
-        // POST: Enclosure/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Enclosure/Edit/{id} - Handles the update of an existing enclosure
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Climate,Habitat,Security,Size")] Enclosure enclosure)
@@ -117,7 +109,7 @@ namespace Dierentuin.Controllers
             return View(enclosure);
         }
 
-        // GET: Enclosure/Delete/5
+        // GET: Enclosure/Delete/{id} - Displays confirmation page for deleting an enclosure
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -135,7 +127,7 @@ namespace Dierentuin.Controllers
             return View(enclosure);
         }
 
-        // POST: Enclosure/Delete/5
+        // POST: Enclosure/Delete/{id} - Handles the deletion of an enclosure
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -150,6 +142,7 @@ namespace Dierentuin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // Helper method to check if an enclosure exists in the database
         private bool EnclosureExists(int id)
         {
             return _context.Enclosures.Any(e => e.Id == id);
