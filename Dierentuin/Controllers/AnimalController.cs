@@ -1,5 +1,3 @@
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,12 +10,13 @@ namespace Dierentuin.Controllers
     {
         private readonly DierentuinContext _context;
 
+        // Constructor: Dependency injection of DierentuinContext
         public AnimalController(DierentuinContext context)
         {
             _context = context;
         }
 
-        // GET: Animal
+        // GET: Animal - Displays a list of all animals, with optional search functionality
         public async Task<IActionResult> Index(string search)
         {
             var animals =
@@ -26,6 +25,7 @@ namespace Dierentuin.Controllers
                 .Include(a => a.Enclosure)
                 select a;
 
+            // If search string is provided, filter animals by name
             if (!String.IsNullOrEmpty(search))
             {
                 animals = animals.Where(a => a.Name.Contains(search));
@@ -34,6 +34,7 @@ namespace Dierentuin.Controllers
             return View(await animals.ToListAsync());
         }
 
+        // GET: Animal/ByCategory/{id} - Displays animals filtered by category
         public async Task<IActionResult> ByCategory(int? id)
         {
             if (id == null)
@@ -55,7 +56,7 @@ namespace Dierentuin.Controllers
             return View(animals);
         }
 
-        // GET: Animal/Details/5
+        // GET: Animal/Details/{id} - Displays details of a specific animal
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -75,13 +76,16 @@ namespace Dierentuin.Controllers
             return View(animal);
         }
 
+        // GET: Animal/Create - Displays form to create a new animal
         public IActionResult Create()
         {
+            // Populate dropdown lists for Categories and Enclosures
             ViewData["Categories"] = new SelectList(_context.Categories, "Id", "Name");
             ViewData["Enclosures"] = new SelectList(_context.Enclosures, "Id", "Name");
             return View();
         }
 
+        // POST: Animal/Create - Handles the creation of a new animal
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Species,CategoryId,EnclosureId,Size,Diet,Activity,Prey,Space,Security")] Animal animal)
@@ -92,12 +96,13 @@ namespace Dierentuin.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            // If model state is invalid, repopulate dropdown lists and return to the Create view
             ViewData["Categories"] = new SelectList(_context.Categories, "Id", "Name", animal.CategoryId);
             ViewData["Enclosures"] = new SelectList(_context.Enclosures, "Id", "Name", animal.EnclosureId);
             return View(animal);
         }
 
-        // GET: Animal/Edit/5
+        // GET: Animal/Edit/{id} - Displays form to edit an existing animal
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -110,12 +115,13 @@ namespace Dierentuin.Controllers
             {
                 return NotFound();
             }
+            // Populate dropdown lists for Categories and Enclosures
             ViewData["Categories"] = new SelectList(_context.Categories, "Id", "Name", animal.CategoryId);
             ViewData["Enclosures"] = new SelectList(_context.Enclosures, "Id", "Name", animal.EnclosureId);
             return View(animal);
         }
 
-        // POST: Animal/Edit/5
+        // POST: Animal/Edit/{id} - Handles the update of an existing animal
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Species,CategoryId,EnclosureId,Size,Diet,Activity,Prey,Space,Security")] Animal animal)
@@ -145,12 +151,13 @@ namespace Dierentuin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            // If model state is invalid, repopulate dropdown lists and return to the Edit view
             ViewData["Categories"] = new SelectList(_context.Categories, "Id", "Name", animal.CategoryId);
             ViewData["Enclosures"] = new SelectList(_context.Enclosures, "Id", "Name", animal.EnclosureId);
             return View(animal);
         }
 
-        // GET: Animal/Delete/5
+        // GET: Animal/Delete/{id} - Displays confirmation page for deleting an animal
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -170,7 +177,7 @@ namespace Dierentuin.Controllers
             return View(animal);
         }
 
-        // POST: Animal/Delete/5
+        // POST: Animal/Delete/{id} - Handles the deletion of an animal
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -185,6 +192,7 @@ namespace Dierentuin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // GET: Animal/SleepState/{id} - Displays the current sleep state of an animal
         public async Task<IActionResult> SleepState(int? id)
         {
             if (id == null)
@@ -208,6 +216,7 @@ namespace Dierentuin.Controllers
             return View(animal);
         }
 
+        // Helper method to determine the sleep state based on activity pattern and current time
         private static string GetSleepState(Animal.ActivityPattern activityPattern)
         {
             var currentHour = DateTime.Now.Hour;
@@ -223,6 +232,7 @@ namespace Dierentuin.Controllers
             };
         }
 
+        // GET: Animal/FeedingTime/{id} - Displays the feeding time information for an animal
         public async Task<IActionResult> FeedingTime(int? id)
         {
             if (id == null)
@@ -245,6 +255,7 @@ namespace Dierentuin.Controllers
             return View(animal);
         }
 
+        // Helper method to check if an animal exists in the database
         private bool AnimalExists(int id)
         {
             return _context.Animals.Any(e => e.Id == id);

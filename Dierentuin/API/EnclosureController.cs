@@ -6,9 +6,9 @@ using Dierentuin.DTO;
 
 namespace Dierentuin.API
 {
-    [Route("api/enclosures")]
+    [Route("api/enclosures")] // Define the route where the api will accesible
     [ApiController]
-    public class EnclosureApiController : ControllerBase
+    public class EnclosureApiController : ControllerBase // Inherit from ControllerBase instead of Controller, leaving out the view functionality used in the Controller class
     {
         private readonly DierentuinContext _context;
 
@@ -17,13 +17,13 @@ namespace Dierentuin.API
             _context = context;
         }
 
-        [HttpGet]
+        [HttpGet] // Simply returns all Enclosures
         public ActionResult<IEnumerable<EnclosureDto>> GetEnclosures()
         {
             var enclosures = _context.Enclosures
                 .Include(e => e.Animals)
                 .ThenInclude(a => a.Category)
-                .Select(e => new EnclosureDto
+                .Select(e => new EnclosureDto // DTO (Data Transfer Object) is used to define what properties will be accesible in the API
                 {
                     Id = e.Id,
                     Name = e.Name,
@@ -49,7 +49,7 @@ namespace Dierentuin.API
             return Ok(enclosures);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}")] // Returns a single enclosure based on it's id
         public ActionResult<EnclosureDto> GetEnclosure(int id)
         {
             var enclosure = _context.Enclosures
@@ -86,7 +86,7 @@ namespace Dierentuin.API
             return Ok(enclosure);
         }
 
-        [HttpGet("{id}/sleepstate")]
+        [HttpGet("{id}/sleepstate")] // returns the sleeping state of a all animals in a given enclosure by it's id
         public ActionResult<IEnumerable<SleepStateDto>> GetEnclosureSleepStates(int id)
         {
             var enclosure = _context.Enclosures
@@ -113,7 +113,7 @@ namespace Dierentuin.API
         {
             var currentHour = DateTime.Now.Hour;
 
-            return activityPattern switch
+            return activityPattern switch // set the sleepingstate based on the activity pattern of the animal and the current hour of the day
             {
                 Animal.ActivityPattern.Diurnal when currentHour >= 6 && currentHour < 18 => "Awake",
                 Animal.ActivityPattern.Diurnal => "Sleeping",
@@ -124,7 +124,7 @@ namespace Dierentuin.API
             };
         }
 
-        [HttpGet("{id}/feedingtime")]
+        [HttpGet("{id}/feedingtime")] // return the feed of a all animals in a given enclosure by it's id
         public ActionResult<IEnumerable<FeedingTimeDto>> GetEnclosureFeedingTimes(int id)
         {
             var enclosure = _context.Enclosures
@@ -147,7 +147,7 @@ namespace Dierentuin.API
             return Ok(animalFeedingTimes);
         }
 
-        [HttpPost]
+        [HttpPost] // Allows adding an enclosure using the API by sending a post request to the enclosures endpoint with the properties as a request body
         public async Task<ActionResult<AnimalDto>> PostEnclosure(EnclosureDto enclosureDto)
         {
             var enclosure = new Enclosure
@@ -165,7 +165,7 @@ namespace Dierentuin.API
             return CreatedAtAction(nameof(GetEnclosure), new { id = enclosure.Id }, enclosureDto);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}")] // Allows editing an enclosure using the API by sending a post request to the enclosures endpoint with the properties as a request body
         public async Task<IActionResult> PutAnimal(int id, EnclosureDto enclosureDto)
         {
             if (id != enclosureDto.Id)
@@ -206,7 +206,7 @@ namespace Dierentuin.API
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}")] // Allows deleting an enclosure using the API by sending a delete request to the enclosures endpoint
         public async Task<IActionResult> DeleteEnclosure(int id)
         {
             var enclosure = await _context.Enclosures.FindAsync(id);
