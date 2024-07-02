@@ -119,6 +119,18 @@ jobs:
       - name: Deploy Grafana
         run: kubectl apply -f k8s/grafana.yml
 
+      - name: Get Configmap Contents
+        run: kubectl get configmap grafana-config -n monitoring -o yaml
+
+      - name: Get Pod Name
+        run: kubectl get pods -n monitoring
+
+      - name: Force Restart Grafana Deployment
+        run: kubectl rollout restart deployment grafana -n monitoring
+
+      - name: Print Logs For Debugging
+        run: kubectl logs -n monitoring deployment/grafana
+
   health-check:
     runs-on: [self-hosted, Linux, ARM64]
     needs: monitoring
