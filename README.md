@@ -10,7 +10,7 @@ Navigeer naar de Dierentuin folder en start de applicatie met:
 dotnet run
 ```
 
-Of met hot-reload functionaliteit met:
+Of met  hot-reload functionaliteit met:
 
 ```
 dotnet watch
